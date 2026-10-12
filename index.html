@@ -1,58 +1,229 @@
+
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bash 課程學習筆記</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 850px;
-      margin: 40px auto;
-      padding: 0 20px;
-      line-height: 1.8;
-      background: #f5f7fa;
-      color: #222;
-    }
-    h1 { color: #1769aa; }
-    .lesson {
-      background: white;
-      padding: 24px;
-      margin: 20px 0;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px #0001;
-    }
-    pre {
-      background: #20252b;
-      color: #e6edf3;
-      padding: 16px;
-      border-radius: 8px;
-      overflow-x: auto;
-    }
-    code { font-family: Consolas, monospace; }
-    a { color: #1769aa; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bash 課程學習筆記</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: Arial, "Microsoft JhengHei", sans-serif;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 28px 18px;
+    background: #f4f6fa;
+    color: #222;
+    line-height: 1.7;
+  }
+  header {
+    background: #1769aa;
+    color: white;
+    padding: 25px;
+    border-radius: 16px;
+    margin-bottom: 22px;
+  }
+  h1 { margin: 0 0 8px; }
+  header p { margin: 0; }
+  #breadcrumb { margin: 15px 0; color: #555; }
+  button, .file-link {
+    font: inherit;
+    cursor: pointer;
+  }
+  button {
+    border: 0;
+    background: #1769aa;
+    color: white;
+    padding: 9px 15px;
+    border-radius: 8px;
+    margin: 4px 4px 4px 0;
+  }
+  button:hover { opacity: .85; }
+  .item, .viewer {
+    background: white;
+    padding: 17px;
+    margin: 12px 0;
+    border-radius: 12px;
+    box-shadow: 0 2px 7px #0000000c;
+  }
+  .item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .item-name { font-weight: bold; overflow-wrap: anywhere; }
+  .muted { color: #666; font-size: .9rem; }
+  pre {
+    background: #20252b;
+    color: #e6edf3;
+    padding: 18px;
+    border-radius: 10px;
+    overflow: auto;
+    white-space: pre;
+    line-height: 1.6;
+  }
+  #content { overflow-wrap: anywhere; }
+  a { color: #1769aa; }
+</style>
 </head>
 <body>
-
+<header>
   <h1>計算機與實務應用</h1>
-  <p>我的 Bash 課程筆記、題目與程式碼整理。</p>
+  <p>Bash 課程筆記・題目・程式碼</p>
+</header>
 
-  <div class="lesson">
-    <h2>第一堂課：範例</h2>
-    <h3>題目</h3>
-    <p>輸出 Hello World，熟悉 Bash 程式的基本寫法。</p>
+<div id="breadcrumb">課程目錄</div>
+<div>
+  <button id="homeBtn">回到課程目錄</button>
+  <button id="backBtn" hidden>返回上一層</button>
+</div>
+<p id="status" class="muted">正在讀取 GitHub 檔案……</p>
+<div id="content"></div>
 
-    <h3>程式碼</h3>
-    <pre><code>#!/bin/bash
-echo "Hello World"</code></pre>
-  </div>
+<script>
+const OWNER = "zongyou0530";
+const REPO = "bash-course";
+const BRANCH = "main";
 
-  <p>
-    <a href="https://github.com/zongyou0530/bash-course">
-      查看 GitHub 原始程式碼
-    </a>
-  </p>
+const content = document.getElementById("content");
+const status = document.getElementById("status");
+const breadcrumb = document.getElementById("breadcrumb");
+const backBtn = document.getElementById("backBtn");
 
+let currentPath = "";
+let historyPaths = [];
+
+function apiUrl(path) {
+  const encoded = path
+    .split("/")
+    .filter(Boolean)
+    .map(encodeURIComponent)
+    .join("/");
+  return `https://api.github.com/repos/${OWNER}/${REPO}/contents/${encoded}?ref=${BRANCH}`;
+}
+
+async function getJson(url) {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error("無法讀取 GitHub 檔案，請稍後再試。");
+  }
+  return response.json();
+}
+
+function setStatus(message) {
+  status.textContent = message;
+}
+
+function makeButton(label, action) {
+  const button = document.createElement("button");
+  button.textContent = label;
+  button.addEventListener("click", action);
+  return button;
+}
+
+function showItem(item, isFolder) {
+  const row = document.createElement("div");
+  row.className = "item";
+
+  const name = document.createElement("div");
+  name.className = "item-name";
+  name.textContent = (isFolder ? "📁 " : "📄 ") + item.name;
+
+  const action = makeButton(
+    isFolder ? "開啟" : "查看",
+    () => isFolder ? openFolder(item.path) : openFile(item)
+  );
+
+  row.append(name, action);
+  content.appendChild(row);
+}
+
+async function openFolder(path = "") {
+  currentPath = path;
+  breadcrumb.textContent = path ? "課程目錄 / " + path : "課程目錄";
+  backBtn.hidden = historyPaths.length === 0;
+  content.replaceChildren();
+  setStatus("正在讀取……");
+
+  try {
+    const items = await getJson(apiUrl(path));
+    const folders = items
+      .filter(item => item.type === "dir")
+      .sort((a, b) => b.name.localeCompare(a.name));
+    const files = items
+      .filter(item => item.type === "file")
+      .sort((a, b) => a.name.localeCompare(b.name));
+
+    [...folders, ...files].forEach(item => {
+      showItem(item, item.type === "dir");
+    });
+
+    setStatus(items.length ? "選擇一個資料夾或檔案即可查看。" : "這個資料夾目前沒有檔案。");
+  } catch (error) {
+    setStatus(error.message);
+    content.appendChild(makeButton("重新載入", () => openFolder(currentPath)));
+  }
+}
+
+async function openFile(item) {
+  content.replaceChildren();
+  breadcrumb.textContent = "課程目錄 / " + item.path;
+  setStatus("正在讀取檔案……");
+
+  const title = document.createElement("h2");
+  title.textContent = item.name;
+  content.appendChild(title);
+
+  try {
+    const response = await fetch(item.download_url);
+    if (!response.ok) throw new Error("檔案讀取失敗。");
+    const text = await response.text();
+
+    const viewer = document.createElement("div");
+    viewer.className = "viewer";
+
+    const pre = document.createElement("pre");
+    const code = document.createElement("code");
+    code.textContent = text;
+    pre.appendChild(code);
+    viewer.appendChild(pre);
+    content.appendChild(viewer);
+
+    const link = document.createElement("a");
+    link.href = item.html_url;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = "在 GitHub 查看原始檔案";
+    content.appendChild(link);
+
+    setStatus("檔案已載入。");
+  } catch (error) {
+    setStatus(error.message);
+  }
+}
+
+document.getElementById("homeBtn").addEventListener("click", () => {
+  historyPaths = [];
+  openFolder("");
+});
+
+backBtn.addEventListener("click", () => {
+  const previous = historyPaths.pop() || "";
+  openFolder(previous);
+});
+
+const originalOpenFolder = openFolder;
+openFolder = async function(path = "") {
+  if (path !== currentPath) {
+    historyPaths.push(currentPath);
+  }
+  await originalOpenFolder(path);
+};
+
+historyPaths = [];
+currentPath = "";
+originalOpenFolder("");
+</script>
 </body>
 </html>
