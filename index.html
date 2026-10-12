@@ -151,9 +151,12 @@ async function openFolder(path = "") {
     const folders = items
       .filter(item => item.type === "dir")
       .sort((a, b) => b.name.localeCompare(a.name));
-    const files = items
-      .filter(item => item.type === "file")
-      .sort((a, b) => a.name.localeCompare(b.name));
+   const files = items
+  .filter(item =>
+    item.type === "file" &&
+    !(path === "" && ["README.md", "index.html"].includes(item.name))
+  )
+  .sort((a, b) => a.name.localeCompare(b.name));
 
     [...folders, ...files].forEach(item => {
       showItem(item, item.type === "dir");
