@@ -1,771 +1,1319 @@
-
+```html
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bash 課程學習筆記</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090b10">
+  <meta name="description" content="Bash 課程筆記與程式碼搜尋平台">
+  <title>Bash Course | Learning Workspace</title>
 
-<style>
-:root {
-  --primary: #3563e9;
-  --primary-dark: #2348bd;
-  --bg: #f5f7fc;
-  --card: #fff;
-  --text: #202b42;
-  --muted: #75819a;
-  --border: #e7ebf3;
-}
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  font-family: Inter, "Microsoft JhengHei", Arial, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.7;
-}
-button, input { font: inherit; }
-button { cursor: pointer; }
-.container {
-  max-width: 1000px;
-  margin: auto;
-  padding: 28px 22px 60px;
-}
-.hero {
-  position: relative;
-  overflow: hidden;
-  padding: 38px 34px;
-  border-radius: 24px;
-  color: white;
-  background: linear-gradient(125deg,#182c62,#3563e9 72%,#7198ff);
-  box-shadow: 0 12px 35px #3563e926;
-}
-.hero::after {
-  content: "</>";
-  position: absolute;
-  right: 28px;
-  bottom: -28px;
-  font-size: 145px;
-  font-weight: 900;
-  color: #ffffff12;
-  pointer-events: none;
-}
-.eyebrow {
-  display: inline-block;
-  padding: 5px 11px;
-  border: 1px solid #ffffff40;
-  border-radius: 30px;
-  font-size: 12px;
-  letter-spacing: 1px;
-  color: #e2eaff;
-}
-.hero h1 {
-  margin: 17px 0 7px;
-  font-size: clamp(27px,5vw,38px);
-  line-height: 1.3;
-}
-.hero p { margin: 0; color: #dce6ff; font-size: 15px; }
-.navigation {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 27px 0 18px;
-}
-.nav-button {
-  padding: 9px 15px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  background: white;
-  color: var(--text);
-}
-.nav-button:hover { border-color: var(--primary); color: var(--primary); }
-.nav-button:disabled { opacity: .4; cursor: not-allowed; }
-.breadcrumb {
-  margin-left: auto;
-  color: var(--muted);
-  font-size: 13px;
-  overflow-wrap: anywhere;
-}
-.search-box {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 0 16px;
-  margin: 18px 0 12px;
-  border: 1px solid var(--border);
-  border-radius: 13px;
-  background: white;
-  transition: .2s;
-}
-.search-box:focus-within {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px #3563e914;
-}
-.search-box span { font-size: 23px; }
-.search-box input {
-  width: 100%;
-  padding: 15px 0;
-  border: 0;
-  outline: none;
-  background: transparent;
-  color: var(--text);
-}
-.search-hint { margin: 0 0 24px; color: var(--muted); font-size: 12px; }
-.section-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin: 22px 0 13px;
-}
-.section-heading h2 { margin: 0; font-size: 20px; }
-.count {
-  padding: 4px 10px;
-  border-radius: 20px;
-  background: #e9efff;
-  color: var(--primary);
-  font-size: 12px;
-  white-space: nowrap;
-}
-.status { margin: 0 0 12px; color: var(--muted); font-size: 13px; }
-.file-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; }
-.item {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  min-width: 0;
-  padding: 19px;
-  border: 1px solid var(--border);
-  border-radius: 15px;
-  background: var(--card);
-  transition: transform .2s,box-shadow .2s,border-color .2s;
-}
-.item:hover {
-  transform: translateY(-3px);
-  border-color: #cbd7ff;
-  box-shadow: 0 8px 24px #253c7210;
-}
-.item-icon {
-  display: grid;
-  flex-shrink: 0;
-  place-items: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 13px;
-  background: #edf2ff;
-  font-size: 23px;
-}
-.code-icon { background: #e7f8ef; }
-.note-icon { background: #fff4df; }
-.item-info { flex: 1; min-width: 0; }
-.item-name { font-weight: 700; overflow-wrap: anywhere; line-height: 1.45; }
-.item-type { margin-top: 5px; color: var(--muted); font-size: 12px; }
-.open-button {
-  flex-shrink: 0;
-  padding: 7px 11px;
-  border: 0;
-  border-radius: 8px;
-  background: #eef2ff;
-  color: var(--primary);
-  font-size: 13px;
-  font-weight: 600;
-}
-.open-button:hover { background: var(--primary); color: white; }
-.result-path {
-  margin-top: 5px;
-  color: var(--primary);
-  font-size: 12px;
-  overflow-wrap: anywhere;
-}
-.result-snippet {
-  margin-top: 9px;
-  padding: 9px 11px;
-  border-radius: 8px;
-  background: #f5f7fc;
-  color: #526079;
-  font: 12px/1.7 Consolas,"Microsoft JhengHei",monospace;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-}
-.viewer {
-  grid-column: 1 / -1;
-  overflow: hidden;
-  margin-top: 8px;
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  background: white;
-}
-.viewer-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding: 15px 18px;
-  border-bottom: 1px solid var(--border);
-}
-.viewer-top h3 { margin: 0; font-size: 16px; overflow-wrap: anywhere; }
-.viewer-top button {
-  padding: 7px 12px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: white;
-  color: var(--text);
-}
-pre {
-  margin: 0;
-  padding: 23px;
-  overflow: auto;
-  background: #172033;
-  color: #e6edf7;
-  font: 14px/1.85 Consolas,"Courier New",monospace;
-  tab-size: 4;
-  white-space: pre;
-}
-.viewer-footer { padding: 12px 18px; color: var(--muted); font-size: 12px; }
-.empty {
-  grid-column: 1 / -1;
-  padding: 38px 20px;
-  border: 1px dashed #cfd7e7;
-  border-radius: 15px;
-  background: #ffffff80;
-  color: var(--muted);
-  text-align: center;
-}
-.empty strong { display: block; margin-bottom: 5px; color: var(--text); }
-footer {
-  margin-top: 45px;
-  padding-top: 20px;
-  border-top: 1px solid var(--border);
-  color: var(--muted);
-  font-size: 12px;
-  text-align: center;
-}
-footer a { color: var(--primary); text-decoration: none; }
-@media (max-width:620px) {
-  .container { padding: 16px 13px 40px; }
-  .hero { padding: 27px 22px; border-radius: 19px; }
-  .hero::after { right: 8px; font-size: 95px; }
-  .file-grid { grid-template-columns: 1fr; }
-  .item { padding: 14px; }
-  .item-icon { width: 43px; height: 43px; }
-  .breadcrumb { width: 100%; margin-left: 0; }
-  pre { padding: 16px; font-size: 12px; }
-}
-</style>
-</head>
-
-<body>
-<div class="container">
-  <header class="hero">
-    <span class="eyebrow">MY PROGRAMMING NOTES</span>
-    <h1>計算機與實務應用</h1>
-    <p>Bash 課程學習筆記・題目整理・程式碼備份</p>
-  </header>
-
-  <nav class="navigation">
-    <button class="nav-button" id="homeBtn">⌂ 課程首頁</button>
-    <button class="nav-button" id="backBtn" disabled>← 返回上一層</button>
-    <div class="breadcrumb" id="breadcrumb">課程目錄</div>
-  </nav>
-
-  <label class="search-box">
-    <span>⌕</span>
-    <input id="searchInput" type="search"
-      placeholder="搜尋所有課程、檔名、程式碼或筆記……"
-      autocomplete="off">
-  </label>
-  <p class="search-hint">全站搜尋：輸入關鍵字即可搜尋所有課程的檔名與文字內容。</p>
-
-  <div class="section-heading">
-    <h2 id="sectionTitle">課程目錄</h2>
-    <span class="count" id="count">載入中</span>
-  </div>
-  <p class="status" id="status">正在讀取 GitHub 檔案……</p>
-  <main id="content" class="file-grid"></main>
-
-  <footer>
-    <p>持續學習，持續累積。</p>
-    <a href="https://github.com/zongyou0530/bash-course"
-       target="_blank" rel="noopener noreferrer">
-      在 GitHub 查看所有課程檔案 ↗
-    </a>
-  </footer>
-</div>
-
-<script>
-const OWNER = "zongyou0530";
-const REPO = "bash-course";
-const BRANCH = "main";
-const MAX_SEARCH_RESULTS = 100;
-const MAX_TEXT_SIZE = 500000;
-
-const content = document.getElementById("content");
-const status = document.getElementById("status");
-const breadcrumb = document.getElementById("breadcrumb");
-const sectionTitle = document.getElementById("sectionTitle");
-const count = document.getElementById("count");
-const backBtn = document.getElementById("backBtn");
-const searchInput = document.getElementById("searchInput");
-
-let currentPath = "";
-let historyPaths = [];
-let currentItems = [];
-let searchIndex = null;
-let indexPromise = null;
-let requestNumber = 0;
-let searchTimer = null;
-let isSearching = false;
-
-function encodePath(path) {
-  return path.split("/").map(encodeURIComponent).join("/");
-}
-
-function apiUrl(path) {
-  const suffix = path ? "/" + encodePath(path) : "";
-  return `https://api.github.com/repos/${OWNER}/${REPO}/contents${suffix}?ref=${BRANCH}`;
-}
-
-function rawUrl(path) {
-  return `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/${encodePath(path)}`;
-}
-
-function githubUrl(path) {
-  return `https://github.com/${OWNER}/${REPO}/blob/${BRANCH}/${encodePath(path)}`;
-}
-
-async function getJson(url) {
-  const response = await fetch(url);
-  if (!response.ok) {
-    if (response.status === 403) {
-      throw new Error("GitHub API 讀取次數可能已達上限，請稍後再試。");
-    }
-    throw new Error("無法讀取 GitHub 資料，請檢查網路或稍後再試。");
-  }
-  return response.json();
-}
-
-function setStatus(message) {
-  status.textContent = message;
-}
-
-function updateNavigation() {
-  breadcrumb.textContent = currentPath
-    ? "課程目錄 / " + currentPath
-    : "課程目錄";
-  sectionTitle.textContent = currentPath
-    ? currentPath.split("/").pop()
-    : "課程目錄";
-  backBtn.disabled = historyPaths.length === 0;
-}
-
-function fileInfo(item) {
-  if (item.type === "dir" || item.type === "tree") {
-    return { icon: "📁", cls: "", type: "課程資料夾" };
-  }
-  const name = item.name.toLowerCase();
-  if (/\.(sh|bash|zsh)$/.test(name)) {
-    return { icon: "⌨️", cls: "code-icon", type: "Bash 程式碼" };
-  }
-  if (name.endsWith(".md")) {
-    return { icon: "📝", cls: "note-icon", type: "課程筆記" };
-  }
-  return { icon: "📄", cls: "", type: "檔案" };
-}
-
-function makeEmpty(message, detail = "") {
-  content.replaceChildren();
-  const box = document.createElement("div");
-  box.className = "empty";
-  const title = document.createElement("strong");
-  title.textContent = message;
-  box.appendChild(title);
-  if (detail) {
-    const text = document.createElement("span");
-    text.textContent = detail;
-    box.appendChild(text);
-  }
-  content.appendChild(box);
-}
-
-function createCard(item, options = {}) {
-  const isFolder = item.type === "dir" || item.type === "tree";
-  const info = fileInfo(item);
-  const card = document.createElement("article");
-  card.className = "item";
-
-  const icon = document.createElement("div");
-  icon.className = "item-icon " + info.cls;
-  icon.textContent = info.icon;
-
-  const details = document.createElement("div");
-  details.className = "item-info";
-
-  const name = document.createElement("div");
-  name.className = "item-name";
-  name.textContent = item.name;
-
-  const type = document.createElement("div");
-  type.className = "item-type";
-  type.textContent = options.result ? info.type : info.type;
-
-  details.append(name, type);
-
-  if (options.result) {
-    const location = document.createElement("div");
-    location.className = "result-path";
-    location.textContent = item.path;
-    details.appendChild(location);
-
-    if (options.snippet) {
-      const snippet = document.createElement("div");
-      snippet.className = "result-snippet";
-      snippet.textContent = options.snippet;
-      details.appendChild(snippet);
-    }
-  }
-
-  const button = document.createElement("button");
-  button.className = "open-button";
-  button.textContent = isFolder ? "開啟 →" : "查看 →";
-  button.addEventListener("click", () => {
-    if (isFolder) {
-      searchInput.value = "";
-      isSearching = false;
-      openFolder(item.path);
-    } else {
-      openFile(item, Boolean(options.result));
-    }
-  });
-
-  card.append(icon, details, button);
-  return card;
-}
-
-async function openFolder(path = "", remember = true) {
-  if (remember && path !== currentPath) {
-    historyPaths.push(currentPath);
-  }
-  currentPath = path;
-  isSearching = false;
-  updateNavigation();
-  content.replaceChildren();
-  setStatus("正在讀取課程資料……");
-  count.textContent = "載入中";
-  searchIndex = searchIndex; // 保留已建立的全站搜尋索引
-
-  const thisRequest = ++requestNumber;
-
-  try {
-    const items = await getJson(apiUrl(path));
-    if (thisRequest !== requestNumber) return;
-    if (!Array.isArray(items)) throw new Error("這個位置不是資料夾。");
-
-    const folders = items
-      .filter(item => item.type === "dir")
-      .sort((a, b) => b.name.localeCompare(a.name));
-
-    const files = items
-      .filter(item =>
-        item.type === "file" &&
-        !(path === "" &&
-          ["README.md", "index.html"].includes(item.name))
-      )
-      .sort((a, b) => a.name.localeCompare(b.name));
-
-    currentItems = [...folders, ...files];
-    renderFolderItems();
-    setStatus(currentItems.length
-      ? "選擇資料夾或檔案，即可查看內容。"
-      : "這個資料夾目前沒有可顯示的項目。");
-  } catch (error) {
-    if (thisRequest !== requestNumber) return;
-    setStatus(error.message);
-    count.textContent = "讀取失敗";
-    const retry = document.createElement("button");
-    retry.className = "nav-button";
-    retry.textContent = "重新載入";
-    retry.addEventListener("click", () => openFolder(currentPath, false));
-    content.appendChild(retry);
-  }
-}
-
-function renderFolderItems() {
-  content.replaceChildren();
-  count.textContent = `${currentItems.length} 個項目`;
-
-  if (!currentItems.length) {
-    makeEmpty("這裡還沒有檔案", "上傳課程檔案到 GitHub 後就會出現在這裡。");
-    return;
-  }
-  currentItems.forEach(item => content.appendChild(createCard(item)));
-}
-
-function supportedTextFile(path) {
-  return /\.(sh|bash|zsh|md|txt)$/i.test(path);
-}
-
-function hiddenRootFile(path) {
-  return !path.includes("/") &&
-    ["README.md", "index.html"].includes(path);
-}
-
-async function buildSearchIndex() {
-  if (searchIndex) return searchIndex;
-  if (indexPromise) return indexPromise;
-
-  indexPromise = (async () => {
-    setStatus("第一次搜尋：正在建立全站索引，請稍候……");
-
-    const data = await getJson(
-      `https://api.github.com/repos/${OWNER}/${REPO}/git/trees/${BRANCH}?recursive=1`
-    );
-
-    if (!Array.isArray(data.tree)) {
-      throw new Error("GitHub 沒有回傳有效的檔案清單。");
-    }
-    if (data.truncated) {
-      throw new Error("課程檔案太多，GitHub 回傳的清單不完整，無法保證全站搜尋。");
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #090b10;
+      --panel: #10141d;
+      --panel-2: #151b27;
+      --panel-hover: #1a2231;
+      --border: #252d3c;
+      --text: #edf2fa;
+      --muted: #8b97aa;
+      --blue: #6ea8ff;
+      --blue-strong: #3b82f6;
+      --green: #68dba5;
+      --red: #ff7b86;
+      --radius: 16px;
+      --shadow: 0 18px 50px rgba(0, 0, 0, .24);
     }
 
-    const entries = data.tree
-      .filter(item =>
-        (item.type === "blob" || item.type === "tree") &&
-        !hiddenRootFile(item.path)
-      )
-      .map(item => ({
-        name: item.path.split("/").pop(),
-        path: item.path,
-        type: item.type === "tree" ? "tree" : "file",
-        size: item.size || 0,
-        content: ""
-      }));
+    * {
+      box-sizing: border-box;
+    }
 
-    const files = entries.filter(item =>
-      item.type === "file" &&
-      supportedTextFile(item.path) &&
-      item.size <= MAX_TEXT_SIZE
-    );
+    html {
+      scroll-behavior: smooth;
+    }
 
-    let finished = 0;
-    let next = 0;
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse at 50% -15%, rgba(59, 130, 246, .14), transparent 48%),
+        var(--bg);
+      font-family: Inter, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      line-height: 1.65;
+    }
 
-    async function worker() {
-      while (next < files.length) {
-        const file = files[next++];
-        try {
-          const response = await fetch(rawUrl(file.path));
-          if (response.ok) file.content = await response.text();
-        } catch {
-          // 單一檔案讀取失敗時，仍保留檔名搜尋功能
-        }
-        finished++;
-        setStatus(`建立搜尋索引中：${finished}/${files.length} 個文字檔案……`);
+    button, input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button:focus-visible, input:focus-visible, a:focus-visible {
+      outline: 2px solid var(--blue);
+      outline-offset: 3px;
+    }
+
+    a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: #a8ccff;
+    }
+
+    .shell {
+      width: min(1120px, calc(100% - 36px));
+      margin: 0 auto;
+      padding: 34px 0 28px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 42px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text);
+      font-weight: 750;
+      letter-spacing: -.4px;
+    }
+
+    .brand-icon {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border: 1px solid #344b70;
+      border-radius: 13px;
+      background: linear-gradient(145deg, #1c3356, #111a2a);
+      color: #9bc4ff;
+      font-family: monospace;
+      font-size: 16px;
+      box-shadow: 0 0 28px rgba(59, 130, 246, .12);
+    }
+
+    .brand small {
+      display: block;
+      margin-top: 1px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .repo-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 13px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: #c7d2e3;
+      background: rgba(16, 20, 29, .7);
+      font-size: 13px;
+      transition: .2s ease;
+    }
+
+    .repo-link:hover {
+      border-color: #405777;
+      background: var(--panel-2);
+    }
+
+    .hero {
+      margin-bottom: 28px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 13px;
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 12px rgba(104, 219, 165, .6);
+      content: "";
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(30px, 5vw, 48px);
+      font-weight: 800;
+      letter-spacing: -1.7px;
+      line-height: 1.2;
+    }
+
+    .hero p {
+      max-width: 650px;
+      margin: 15px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .workspace {
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: rgba(16, 20, 29, .92);
+      box-shadow: var(--shadow);
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 17px 20px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255, 255, 255, .012);
+    }
+
+    .toolbar-left, .toolbar-right {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 37px;
+      padding: 7px 12px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      color: #d8e1ee;
+      background: #141a25;
+      font-size: 13px;
+      transition: background .18s ease, border-color .18s ease, transform .18s ease;
+    }
+
+    .btn:hover:not(:disabled) {
+      border-color: #405777;
+      background: #202a3a;
+      transform: translateY(-1px);
+    }
+
+    .btn:disabled {
+      cursor: not-allowed;
+      opacity: .35;
+    }
+
+    .btn-primary {
+      border-color: #3167b7;
+      color: white;
+      background: #2457a0;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      border-color: #5c9aff;
+      background: #2d69bd;
+    }
+
+    .search-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 430px;
+    }
+
+    .search-icon {
+      position: absolute;
+      top: 50%;
+      left: 13px;
+      color: #8492a7;
+      pointer-events: none;
+      transform: translateY(-50%);
+    }
+
+    .search-input {
+      width: 100%;
+      min-height: 43px;
+      padding: 10px 13px 10px 39px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      outline: none;
+      color: var(--text);
+      background: #0b0f17;
+      font-size: 14px;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    .search-input::placeholder {
+      color: #657187;
+    }
+
+    .search-input:focus {
+      border-color: #477fc7;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, .12);
+    }
+
+    .search-hint {
+      margin: 8px 2px 0;
+      color: #78859a;
+      font-size: 12px;
+    }
+
+    .search-area {
+      padding: 0 20px 18px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .main-content {
+      padding: 22px 20px 26px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 18px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 750;
+      letter-spacing: -.3px;
+      overflow-wrap: anywhere;
+    }
+
+    .section-subtitle {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .count {
+      flex-shrink: 0;
+      padding: 4px 10px;
+      border: 1px solid #293b56;
+      border-radius: 999px;
+      color: #a8caff;
+      background: #15243a;
+      font-size: 12px;
+    }
+
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 18px;
+      color: var(--muted);
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .breadcrumb button {
+      padding: 0;
+      border: 0;
+      color: #8fa1ba;
+      background: transparent;
+    }
+
+    .breadcrumb button:hover {
+      color: var(--blue);
+    }
+
+    .breadcrumb .current {
+      color: #dbe6f5;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .item-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+      min-width: 0;
+      padding: 16px;
+      border: 1px solid #242c3a;
+      border-radius: 13px;
+      color: var(--text);
+      background: linear-gradient(145deg, #141a25, #111620);
+      text-align: left;
+      transition: .18s ease;
+    }
+
+    .item-card:hover {
+      border-color: #3b5274;
+      background: linear-gradient(145deg, #192437, #141b28);
+      transform: translateY(-2px);
+    }
+
+    .item-icon {
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      border: 1px solid #2a3e5a;
+      border-radius: 11px;
+      color: #8dbaff;
+      background: #17263b;
+      font-size: 17px;
+    }
+
+    .item-icon.file {
+      border-color: #2c453f;
+      color: #8ce0ba;
+      background: #162923;
+    }
+
+    .item-info {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .item-name {
+      display: block;
+      color: #e5edf8;
+      font-size: 14px;
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+
+    .item-meta {
+      display: block;
+      margin-top: 4px;
+      color: #8592a6;
+      font-size: 11px;
+      overflow-wrap: anywhere;
+    }
+
+    .item-description {
+      display: block;
+      margin-top: 8px;
+      color: #a8b3c4;
+      font-size: 12px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .item-arrow {
+      flex-shrink: 0;
+      margin: 5px 0 0 auto;
+      color: #66748a;
+    }
+
+    .status {
+      margin: 0 0 16px;
+      padding: 11px 13px;
+      border: 1px solid #263345;
+      border-radius: 10px;
+      color: #aab8cc;
+      background: #111824;
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .status.error {
+      border-color: #61343b;
+      color: #ffb0b6;
+      background: #241519;
+    }
+
+    .status.success {
+      border-color: #28503f;
+      color: #a2e9c4;
+      background: #12221b;
+    }
+
+    .empty {
+      padding: 52px 18px;
+      border: 1px dashed #303b4d;
+      border-radius: 14px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .empty-icon {
+      margin-bottom: 12px;
+      font-size: 30px;
+    }
+
+    .empty strong {
+      display: block;
+      margin-bottom: 5px;
+      color: #d9e3f1;
+      font-size: 15px;
+    }
+
+    .empty p {
+      margin: 0;
+      font-size: 13px;
+    }
+
+    .file-view {
+      overflow: hidden;
+      border: 1px solid #2b3444;
+      border-radius: 13px;
+      background: #0a0e15;
+    }
+
+    .file-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 15px;
+      border-bottom: 1px solid #242c39;
+      background: #121823;
+    }
+
+    .file-name {
+      min-width: 0;
+      color: #dce6f5;
+      font-family: monospace;
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .file-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .file-actions .btn {
+      min-height: 32px;
+      padding: 5px 9px;
+      font-size: 11px;
+    }
+
+    pre {
+      max-height: 650px;
+      margin: 0;
+      padding: 20px;
+      overflow: auto;
+      color: #d4deec;
+      font-family: "Cascadia Code", "JetBrains Mono", Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.8;
+      tab-size: 4;
+      white-space: pre;
+    }
+
+    .search-result {
+      display: block;
+      width: 100%;
+    }
+
+    .snippet {
+      display: block;
+      margin-top: 9px;
+      padding: 9px 11px;
+      border: 1px solid #252f3f;
+      border-radius: 8px;
+      color: #9ba9bd;
+      background: #0b1018;
+      font-family: monospace;
+      font-size: 11px;
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+
+    mark {
+      padding: 0 2px;
+      border-radius: 3px;
+      color: #fff0ad;
+      background: #65501d;
+    }
+
+    .footer {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 22px;
+      color: #69768a;
+      font-size: 11px;
+    }
+
+    .footer strong {
+      color: #94a3b8;
+      font-weight: 600;
+    }
+
+    .loading-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      margin-right: 7px;
+      border-radius: 50%;
+      background: var(--blue);
+      box-shadow: 0 0 10px rgba(110, 168, 255, .6);
+      animation: pulse 1.2s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      50% { opacity: .35; }
+    }
+
+    ::selection {
+      color: white;
+      background: #285aa0;
+    }
+
+    ::-webkit-scrollbar {
+      width: 9px;
+      height: 9px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #0a0e15;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      border: 2px solid #0a0e15;
+      border-radius: 20px;
+      background: #364257;
+    }
+
+    @media (max-width: 680px) {
+      .shell {
+        width: min(100% - 22px, 1120px);
+        padding-top: 20px;
+      }
+
+      .topbar {
+        margin-bottom: 30px;
+      }
+
+      .brand-icon {
+        width: 38px;
+        height: 38px;
+      }
+
+      .repo-link {
+        padding: 8px 10px;
+        font-size: 11px;
+      }
+
+      .hero p {
+        font-size: 13px;
+      }
+
+      .toolbar {
+        align-items: stretch;
+        padding: 13px;
+      }
+
+      .toolbar-left, .toolbar-right {
+        width: 100%;
+      }
+
+      .toolbar-right .btn {
+        flex: 1;
+      }
+
+      .search-area {
+        padding: 0 13px 14px;
+      }
+
+      .main-content {
+        padding: 17px 13px 20px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .item-card {
+        padding: 13px;
+      }
+
+      pre {
+        padding: 14px;
+        font-size: 12px;
+      }
+
+      .file-top {
+        align-items: flex-start;
+      }
+
+      .footer {
+        flex-direction: column;
+        align-items: flex-start;
       }
     }
 
-    await Promise.all(
-      Array.from({ length: Math.min(6, files.length) }, () => worker())
-    );
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
 
-    searchIndex = entries;
-    return searchIndex;
-  })();
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="Bash Course 首頁">
+        <span class="brand-icon">&gt;_</span>
+        <span>
+          Bash Course
+          <small>Learning Workspace</small>
+        </span>
+      </a>
 
-  try {
-    return await indexPromise;
-  } finally {
-    indexPromise = null;
-  }
-}
+      <a
+        class="repo-link"
+        href="https://github.com/zongyou0530/bash-course"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        ↗ GitHub Repository
+      </a>
+    </header>
 
-function makeSnippet(text, terms) {
-  if (!text) return "";
-  const lower = text.toLowerCase();
-  let position = -1;
+    <section class="hero">
+      <div class="eyebrow">Personal Learning Archive</div>
+      <h1>把每一次練習，<br>變成自己的實力。</h1>
+      <p>
+        Bash 課程筆記、程式碼與學習紀錄集中管理。
+        透過資料夾瀏覽或全文搜尋，快速找到你需要的內容。
+      </p>
+    </section>
 
-  for (const term of terms) {
-    position = lower.indexOf(term);
-    if (position >= 0) break;
-  }
+    <main class="workspace">
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <button class="btn" id="homeBtn" type="button">⌂ 首頁</button>
+          <button class="btn" id="backBtn" type="button" disabled>← 返回上一層</button>
+        </div>
+        <div class="toolbar-right">
+          <button class="btn" id="refreshBtn" type="button">↻ 重新載入</button>
+        </div>
+      </div>
 
-  if (position < 0) return "";
-  const start = Math.max(0, position - 55);
-  const end = Math.min(text.length, position + 115);
-  return (start > 0 ? "…" : "") +
-    text.slice(start, end) +
-    (end < text.length ? "…" : "");
-}
+      <div class="search-area">
+        <div class="search-wrap">
+          <span class="search-icon">⌕</span>
+          <input
+            class="search-input"
+            id="searchInput"
+            type="search"
+            placeholder="搜尋程式碼、指令或筆記內容……"
+            autocomplete="off"
+            spellcheck="false"
+            aria-label="搜尋課程檔案內容"
+          >
+        </div>
+        <p class="search-hint">
+          支援檔名與內容搜尋，例如：if、read、變數、檔案檢查。
+          按 Enter 或點擊搜尋按鈕即可開始。
+        </p>
+        <button class="btn btn-primary" id="searchBtn" type="button" style="margin-top:10px">
+          ⌕ 搜尋全部課程
+        </button>
+      </div>
 
-async function performSearch(query) {
-  const thisRequest = ++requestNumber;
-  isSearching = true;
-  content.replaceChildren();
-  sectionTitle.textContent = "全站搜尋";
-  breadcrumb.textContent = "課程目錄 / 搜尋";
-  count.textContent = "搜尋中";
-  setStatus("正在搜尋所有課程……");
+      <div class="main-content">
+        <nav class="breadcrumb" id="breadcrumb" aria-label="目前路徑"></nav>
 
-  try {
-    const index = await buildSearchIndex();
-    if (thisRequest !== requestNumber) return;
+        <div class="section-head">
+          <div>
+            <h2 id="sectionTitle">課程檔案</h2>
+            <div class="section-subtitle" id="sectionSubtitle">正在連線至 GitHub……</div>
+          </div>
+          <span class="count" id="count">載入中</span>
+        </div>
 
-    const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
+        <div class="status" id="status" role="status" aria-live="polite">
+          <span class="loading-dot"></span>正在讀取課程資料……
+        </div>
 
-    const matches = index.filter(item => {
-      const name = item.name.toLowerCase();
-      const path = item.path.toLowerCase();
-      const text = (item.content || "").toLowerCase();
-      const searchable = `${name}\n${path}\n${text}`;
-      return terms.every(term => searchable.includes(term));
-    });
+        <div class="grid" id="content"></div>
+      </div>
+    </main>
 
-    count.textContent = `${matches.length} 個結果`;
-    content.replaceChildren();
+    <footer class="footer">
+      <span><strong>Bash Course</strong> · Personal Learning Workspace</span>
+      <span>內容來源：GitHub Repository · 靜態網站</span>
+    </footer>
+  </div>
 
-    if (!matches.length) {
-      makeEmpty("找不到符合的結果", "試試其他關鍵字，或檢查檔案是否已上傳到 GitHub。");
-      setStatus("搜尋完成。");
-      return;
+  <script>
+    "use strict";
+
+    const OWNER = "zongyou0530";
+    const REPO = "bash-course";
+    const BRANCH = "main";
+    const API_ROOT = `https://api.github.com/repos/${OWNER}/${REPO}`;
+    const RAW_ROOT = `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}`;
+    const REPO_ROOT = `https://github.com/${OWNER}/${REPO}`;
+
+    const searchableExtensions = new Set(["sh", "bash", "zsh", "md", "txt"]);
+    const ignoredRootFiles = new Set(["README.md", "index.html"]);
+
+    const $ = (id) => document.getElementById(id);
+
+    const state = {
+      path: "",
+      history: [],
+      searchIndex: null,
+      searchPromise: null,
+      loading: false,
+      searchMode: false,
+      requestId: 0
+    };
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[char]);
     }
 
-    const shown = matches.slice(0, MAX_SEARCH_RESULTS);
-
-    shown.forEach(item => {
-      const snippet = makeSnippet(item.content, terms);
-      content.appendChild(createCard(item, {
-        result: true,
-        snippet
-      }));
-    });
-
-    if (matches.length > MAX_SEARCH_RESULTS) {
-      const more = document.createElement("p");
-      more.className = "status";
-      more.style.gridColumn = "1 / -1";
-      more.textContent =
-        `目前顯示前 ${MAX_SEARCH_RESULTS} 筆，共找到 ${matches.length} 筆。請加上更精確的關鍵字。`;
-      content.appendChild(more);
+    function getExtension(path) {
+      const name = path.split("/").pop() || "";
+      const dot = name.lastIndexOf(".");
+      return dot >= 0 ? name.slice(dot + 1).toLowerCase() : "";
     }
 
-    setStatus("搜尋完成。點擊結果即可查看檔案或進入資料夾。");
-  } catch (error) {
-    if (thisRequest !== requestNumber) return;
-    count.textContent = "搜尋失敗";
-    setStatus(error.message);
-    const retry = document.createElement("button");
-    retry.className = "nav-button";
-    retry.textContent = "重新搜尋";
-    retry.addEventListener("click", () => performSearch(searchInput.value.trim()));
-    content.appendChild(retry);
-  }
-}
+    function displayName(path) {
+      return path.split("/").pop() || "課程首頁";
+    }
 
-function openFile(item, fromSearch = false) {
-  if (!fromSearch && currentPath !== item.path) {
-    historyPaths.push(currentPath);
-  }
+    function apiUrl(path = "") {
+      return `${API_ROOT}/contents/${path.split("/").filter(Boolean).map(encodeURIComponent).join("/")}?ref=${encodeURIComponent(BRANCH)}`;
+    }
 
-  const thisRequest = ++requestNumber;
-  content.replaceChildren();
-  sectionTitle.textContent = item.name;
-  breadcrumb.textContent = "課程目錄 / " + item.path;
-  count.textContent = "檔案";
-  backBtn.disabled = historyPaths.length === 0;
-  setStatus("正在讀取檔案……");
+    function rawUrl(path) {
+      return `${RAW_ROOT}/${path.split("/").map(encodeURIComponent).join("/")}`;
+    }
 
-  const viewer = document.createElement("section");
-  viewer.className = "viewer";
+    function githubUrl(path) {
+      return `${REPO_ROOT}/blob/${BRANCH}/${path.split("/").map(encodeURIComponent).join("/")}`;
+    }
 
-  const top = document.createElement("div");
-  top.className = "viewer-top";
+    function setStatus(message, type = "") {
+      const status = $("status");
+      status.className = `status${type ? " " + type : ""}`;
+      status.textContent = message;
+    }
 
-  const title = document.createElement("h3");
-  title.textContent = "📄 " + item.name;
+    function setLoading(message = "正在載入……") {
+      const status = $("status");
+      status.className = "status";
+      status.innerHTML = `<span class="loading-dot"></span>${escapeHtml(message)}`;
+    }
 
-  const copyButton = document.createElement("button");
-  copyButton.textContent = "複製內容";
-  copyButton.disabled = true;
+    function updateNav() {
+      $("backBtn").disabled = state.history.length === 0;
+    }
 
-  const pre = document.createElement("pre");
-  const code = document.createElement("code");
-  pre.appendChild(code);
+    function renderBreadcrumb(path) {
+      const breadcrumb = $("breadcrumb");
+      const parts = path ? path.split("/") : [];
+      let html = `<button type="button" data-path="">⌂ 課程首頁</button>`;
 
-  const footer = document.createElement("div");
-  footer.className = "viewer-footer";
-  footer.textContent = "來源：GitHub";
+      let accumulated = "";
+      for (let i = 0; i < parts.length; i++) {
+        accumulated = accumulated ? `${accumulated}/${parts[i]}` : parts[i];
+        html += `<span>/</span>`;
 
-  top.append(title, copyButton);
-  viewer.append(top, pre, footer);
-  content.appendChild(viewer);
-
-  const link = document.createElement("a");
-  link.href = githubUrl(item.path);
-  link.target = "_blank";
-  link.rel = "noopener noreferrer";
-  link.textContent = "在 GitHub 查看原始檔案 ↗";
-  link.style.display = "inline-block";
-  link.style.margin = "16px 0";
-  link.style.textDecoration = "none";
-  content.appendChild(link);
-
-  fetch(rawUrl(item.path))
-    .then(response => {
-      if (!response.ok) throw new Error("檔案讀取失敗，請稍後再試。");
-      return response.text();
-    })
-    .then(text => {
-      if (thisRequest !== requestNumber) return;
-      code.textContent = text;
-      copyButton.disabled = false;
-      copyButton.addEventListener("click", async () => {
-        try {
-          await navigator.clipboard.writeText(text);
-          copyButton.textContent = "已複製 ✓";
-        } catch {
-          copyButton.textContent = "複製失敗，請手動選取";
+        if (i === parts.length - 1) {
+          html += `<span class="current">${escapeHtml(parts[i])}</span>`;
+        } else {
+          html += `<button type="button" data-path="${escapeHtml(accumulated)}">${escapeHtml(parts[i])}</button>`;
         }
+      }
+
+      breadcrumb.innerHTML = html;
+      breadcrumb.querySelectorAll("button[data-path]").forEach((button) => {
+        button.addEventListener("click", () => navigate(button.dataset.path));
       });
-      setStatus("檔案已載入，可以閱讀或複製內容。");
-    })
-    .catch(error => {
-      if (thisRequest !== requestNumber) return;
-      setStatus(error.message);
-    });
-}
-
-searchInput.addEventListener("input", () => {
-  clearTimeout(searchTimer);
-  const query = searchInput.value.trim();
-
-  searchTimer = setTimeout(() => {
-    if (query) {
-      performSearch(query);
-    } else {
-      isSearching = false;
-      openFolder(currentPath, false);
     }
-  }, 300);
-});
 
-document.getElementById("homeBtn").addEventListener("click", () => {
-  clearTimeout(searchTimer);
-  searchInput.value = "";
-  historyPaths = [];
-  openFolder("", false);
-});
+    function renderEmpty(title, message) {
+      $("content").innerHTML = `
+        <div class="empty" style="grid-column:1/-1">
+          <div class="empty-icon">⌕</div>
+          <strong>${escapeHtml(title)}</strong>
+          <p>${escapeHtml(message)}</p>
+        </div>`;
+    }
 
-backBtn.addEventListener("click", () => {
-  if (!historyPaths.length) return;
-  clearTimeout(searchTimer);
-  searchInput.value = "";
-  isSearching = false;
-  const previous = historyPaths.pop();
-  openFolder(previous, false);
-});
+    function isIgnoredRootFile(path) {
+      return !path.includes("/") && ignoredRootFiles.has(path);
+    }
 
-openFolder("", false);
-</script>
+    function fileTypeLabel(item) {
+      if (item.type === "dir" || item.type === "tree") return "課程資料夾";
+      const ext = getExtension(item.path || item.name || "");
+      const labels = {
+        sh: "Shell Script",
+        bash: "Bash Script",
+        zsh: "Zsh Script",
+        md: "Markdown 筆記",
+        txt: "文字檔案"
+      };
+      return labels[ext] || (ext ? `${ext.toUpperCase()} 檔案` : "一般檔案");
+    }
+
+    function iconFor(item) {
+      if (item.type === "dir" || item.type === "tree") return "▰";
+      const ext = getExtension(item.path || item.name || "");
+      if (["sh", "bash", "zsh"].includes(ext)) return "&lt;/&gt;";
+      if (ext === "md" || ext === "txt") return "≡";
+      return "◇";
+    }
+
+    function renderItems(items) {
+      const content = $("content");
+
+      if (!items.length) {
+        renderEmpty("這裡還沒有可顯示的檔案", "可以新增課程資料夾或檔案，之後再按「重新載入」。");
+        $("count").textContent = "0 個項目";
+        return;
+      }
+
+      $("count").textContent = `${items.length} 個項目`;
+
+      content.innerHTML = items.map((item, index) => {
+        const name = item.name || displayName(item.path || "");
+        const path = item.path || name;
+        const isDir = item.type === "dir" || item.type === "tree";
+        const description = item.description || "";
+        return `
+          <button class="item-card" type="button" data-index="${index}">
+            <span class="item-icon${isDir ? "" : " file"}">${iconFor(item)}</span>
+            <span class="item-info">
+              <span class="item-name">${escapeHtml(name)}</span>
+              <span class="item-meta">${escapeHtml(fileTypeLabel(item))}</span>
+              ${description ? `<span class="item-description">${escapeHtml(description)}</span>` : ""}
+            </span>
+            <span class="item-arrow">${isDir ? "›" : "↗"}</span>
+          </button>`;
+      }).join("");
+
+      content.querySelectorAll(".item-card").forEach((card) => {
+        card.addEventListener("click", () => {
+          const item = items[Number(card.dataset.index)];
+          if (!item) return;
+          if (item.type === "dir" || item.type === "tree") {
+            navigate(item.path);
+          } else if (item.searchResult) {
+            openFile(item, true);
+          } else {
+            openFile(item);
+          }
+        });
+      });
+    }
+
+    async function fetchJson(url) {
+      const response = await fetch(url, {
+        headers: { Accept: "application/vnd.github+json" }
+      });
+
+      if (!response.ok) {
+        if (response.status === 403) {
+          throw new Error("GitHub API 暫時限制了請求次數，請稍後再試。");
+        }
+        if (response.status === 404) {
+          throw new Error("找不到資料。請確認 Repository 是公開的，而且分支名稱是 main。");
+        }
+        throw new Error(`GitHub 請求失敗（HTTP ${response.status}）。`);
+      }
+
+      return response.json();
+    }
+
+    async function navigate(path, options = {}) {
+      const target = (path || "").replace(/^\/+|\/+$/g, "");
+      if (state.loading) return;
+
+      if (!options.fromHistory && target !== state.path) {
+        state.history.push(state.path);
+      }
+
+      state.path = target;
+      state.searchMode = false;
+      state.loading = true;
+      state.requestId++;
+
+      $("searchInput").value = "";
+      $("sectionTitle").textContent = target ? displayName(target) : "課程檔案";
+      $("sectionSubtitle").textContent = target ? `目前位置：${target}` : "依照課程日期整理的學習紀錄";
+      $("content").innerHTML = "";
+      $("count").textContent = "載入中";
+      renderBreadcrumb(target);
+      updateNav();
+      setLoading("正在讀取 GitHub 檔案清單……");
+
+      try {
+        const data = await fetchJson(apiUrl(target));
+        if (!Array.isArray(data)) {
+          throw new Error("GitHub 回傳的資料格式不正確。");
+        }
+
+        let items = data.filter((item) => !isIgnoredRootFile(item.path || item.name || ""));
+        items.sort((a, b) => {
+          const aDir = a.type === "dir" ? 0 : 1;
+          const bDir = b.type === "dir" ? 0 : 1;
+          if (aDir !== bDir) return aDir - bDir;
+          return (b.name || "").localeCompare(a.name || "", "zh-Hant", {
+            numeric: true,
+            sensitivity: "base"
+          });
+        });
+
+        if (target === "") {
+          items = items.filter((item) => item.type === "dir" || item.type === "file");
+        }
+
+        renderItems(items);
+        setStatus(`已載入 ${items.length} 個項目。`);
+      } catch (error) {
+        renderEmpty("載入失敗", error.message || "請確認網路連線後再試一次。");
+        $("count").textContent = "載入失敗";
+        setStatus(error.message || "讀取資料時發生錯誤。", "error");
+      } finally {
+        state.loading = false;
+        updateNav();
+      }
+    }
+
+    async function openFile(item, fromSearch = false) {
+      if (state.loading) return;
+
+      const path = item.path;
+      if (!path) return;
+
+      state.loading = true;
+      const requestId = ++state.requestId;
+      $("sectionTitle").textContent = displayName(path);
+      $("sectionSubtitle").textContent = `檔案位置：${path}`;
+      $("count").textContent = "讀取中";
+      renderBreadcrumb(path);
+      $("content").innerHTML = "";
+      setLoading("正在讀取檔案內容……");
+
+      try {
+        const response = await fetch(rawUrl(path));
+        if (!response.ok) {
+          throw new Error(`無法讀取檔案（HTTP ${response.status}）。`);
+        }
+
+        const text = await response.text();
+        if (requestId !== state.requestId) return;
+
+        $("count").textContent = `${text.length.toLocaleString()} 字元`;
+        $("content").innerHTML = `
+          <div class="file-view" style="grid-column:1/-1">
+            <div class="file-top">
+              <span class="file-name">${escapeHtml(path)}</span>
+              <div class="file-actions">
+                <button class="btn" id="copyBtn" type="button">▣ 複製內容</button>
+                <a class="btn" href="${escapeHtml(githubUrl(path))}" target="_blank" rel="noopener noreferrer">↗ GitHub 原始檔</a>
+              </div>
+            </div>
+            <pre><code id="fileCode">${escapeHtml(text)}</code></pre>
+          </div>`;
+
+        $("copyBtn").addEventListener("click", async () => {
+          const button = $("copyBtn");
+          try {
+            await copyText(text);
+            button.textContent = "✓ 已複製";
+            setTimeout(() => {
+              if (button.isConnected) button.textContent = "▣ 複製內容";
+            }, 1600);
+          } catch {
+            button.textContent = "複製失敗";
+          }
+        });
+
+        setStatus("檔案已載入。你可以直接閱讀或複製內容。", "success");
+      } catch (error) {
+        $("count").textContent = "讀取失敗";
+        renderEmpty("無法開啟檔案", error.message || "請稍後再試。");
+        setStatus(error.message || "讀取檔案時發生錯誤。", "error");
+      } finally {
+        state.loading = false;
+        updateNav();
+      }
+    }
+
+    async function copyText(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return;
+      }
+
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.select();
+      const success = document.execCommand("copy");
+      textarea.remove();
+
+      if (!success) throw new Error("無法複製");
+    }
+
+    async function buildSearchIndex() {
+      if (state.searchIndex) return state.searchIndex;
+      if (state.searchPromise) return state.searchPromise;
+
+      state.searchPromise = (async () => {
+        setLoading("正在建立全文搜尋索引，第一次可能需要一點時間……");
+
+        const url = `${API_ROOT}/git/trees/${encodeURIComponent(BRANCH)}?recursive=1`;
+        const treeData = await fetchJson(url);
+
+        if (treeData.truncated) {
+          throw new Error("Repository 檔案數量過多，GitHub 回傳的檔案清單不完整。");
+        }
+
+        const files = (treeData.tree || []).filter((item) => {
+          if (item.type !== "blob" || isIgnoredRootFile(item.path)) return false;
+          if (!searchableExtensions.has(getExtension(item.path))) return false;
+          return (item.size || 0) < 500000;
+        });
+
+        const index = [];
+        let next = 0;
+        let completed = 0;
+        const concurrency = 6;
+
+        async function worker() {
+          while (next < files.length) {
+            const current = files[next++];
+            try {
+              const response = await fetch(rawUrl(current.path));
+              if (response.ok) {
+                const text = await response.text();
+                index.push({
+                  name: displayName(current.path),
+                  path: current.path,
+                  type: "file",
+                  text,
+                  searchable: `${current.path}\n${text}`.toLocaleLowerCase()
+                });
+              }
+            } catch (error) {
+              console.warn("略過無法讀取的檔案：", current.path, error);
+            } finally {
+              completed++;
+              if (completed % 10 === 0 || completed === files.length) {
+                setLoading(`建立搜尋索引中…… ${completed}/${files.length}`);
+              }
+            }
+          }
+        }
+
+        await Promise.all(
+          Array.from({ length: Math.min(concurrency, files.length) }, () => worker())
+        );
+
+        state.searchIndex = index;
+        return index;
+      })();
+
+      try {
+        return await state.searchPromise;
+      } finally {
+        state.searchPromise = null;
+      }
+    }
+
+    function makeSnippet(text, terms) {
+      const lower = text.toLocaleLowerCase();
+      let position = -1;
+
+      for (const term of terms) {
+        position = lower.indexOf(term.toLocaleLowerCase());
+        if (position >= 0) break;
+      }
+
+      if (position < 0) position = 0;
+      const start = Math.max(0, position - 75);
+      const end = Math.min(text.length, position + 180);
+      let snippet = text.slice(start, end).replace(/\s+/g, " ").trim();
+
+      if (start > 0) snippet = "…" + snippet;
+      if (end < text.length) snippet += "…";
+
+      return snippet;
+    }
+
+    function highlight(text, terms) {
+      let result = escapeHtml(text);
+      const sortedTerms = [...new Set(terms)].sort((a, b) => b.length - a.length);
+
+      for (const term of sortedTerms) {
+        const safe = escapeHtml(term);
+        if (!safe) continue;
+        const escapedPattern = safe.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        try {
+          result = result.replace(new RegExp(`(${escapedPattern})`, "gi"), "<mark>$1</mark>");
+        } catch {
+          // 略過無法建立的搜尋字詞樣式
+        }
+      }
+      return result;
+    }
+
+    async function searchAll() {
+      const query = $("searchInput").value.trim();
+      if (!query) {
+        setStatus("請先輸入要搜尋的內容。");
+        $("searchInput").focus();
+        return;
+      }
+
+      if (state.loading) return;
+
+      state.loading = true;
+      state.searchMode = true;
+      const requestId = ++state.requestId;
+      const terms = query.toLocaleLowerCase().split(/\s+/).filter(Boolean);
+
+      $("sectionTitle").textContent = "全文搜尋";
+      $("sectionSubtitle").textContent = `搜尋關鍵字：${query}`;
+      $("content").innerHTML = "";
+      $("count").textContent = "搜尋中";
+      renderBreadcrumb("");
+      setLoading("正在搜尋課程檔案……");
+
+      try {
+        const index = await buildSearchIndex();
+        if (requestId !== state.requestId) return;
+
+        const matches = index.filter((item) =>
+          terms.every((term) => item.searchable.includes(term))
+        );
+
+        matches.sort((a, b) => {
+          const aName = a.name.toLocaleLowerCase().includes(terms[0]) ? 0 : 1;
+          const bName = b.name.toLocaleLowerCase().includes(terms[0]) ? 0 : 1;
+          if (aName !== bName) return aName - bName;
+          return a.path.localeCompare(b.path, "zh-Hant", { numeric: true });
+        });
+
+        const shown = matches.slice(0, 100);
+        $("count").textContent = `${matches.length} 筆結果`;
+
+        if (!shown.length) {
+          renderEmpty("沒有找到符合的內容", "試試其他關鍵字，例如 if、read、變數或檔案檢查。");
+        } else {
+          const content = $("content");
+          content.innerHTML = shown.map((item, i) => {
+            const snippet = makeSnippet(item.text, terms);
+            return `
+              <button class="item-card search-result" type="button" data-index="${i}">
+                <span class="item-icon file">&lt;/&gt;</span>
+                <span class="item-info">
+                  <span class="item-name">${highlight(item.name, terms)}</span>
+                  <span class="item-meta">${escapeHtml(item.path)}</span>
+                  <span class="snippet">${highlight(snippet, terms)}</span>
+                </span>
+                <span class="item-arrow">↗</span>
+              </button>`;
+          }).join("");
+
+          content.querySelectorAll(".search-result").forEach((card) => {
+            card.addEventListener("click", () => {
+              const item = shown[Number(card.dataset.index)];
+              if (item) {
+                state.history.push(state.path);
+                state.path = item.path.split("/").slice(0, -1).join("/");
+                openFile(item, true);
+              }
+            });
+          });
+        }
+
+        setStatus(
+          matches.length > 100
+            ? `找到 ${matches.length} 筆結果，目前顯示前 100 筆。`
+            : `搜尋完成，共找到 ${matches.length} 筆結果。`,
+          "success"
+        );
+      } catch (error) {
+        renderEmpty("搜尋失敗", error.message || "請稍後再試。");
+        $("count").textContent = "搜尋失敗";
+        setStatus(error.message || "建立搜尋索引時發生錯誤。", "error");
+      } finally {
+        state.loading = false;
+        updateNav();
+      }
+    }
+
+    function goHome() {
+      state.history = [];
+      navigate("");
+    }
+
+    function goBack() {
+      if (state.loading || state.history.length === 0) return;
+      const previous = state.history.pop();
+      navigate(previous, { fromHistory: true });
+    }
+
+    $("homeBtn").addEventListener("click", goHome);
+    $("backBtn").addEventListener("click", goBack);
+    $("refreshBtn").addEventListener("click", () => {
+      state.searchIndex = null;
+      state.searchPromise = null;
+      state.history = [];
+      navigate("");
+    });
+    $("searchBtn").addEventListener("click", searchAll);
+
+    $("searchInput").addEventListener("keydown", (event) => {
+      if (event.key === "Enter") searchAll();
+      if (event.key === "Escape") {
+        $("searchInput").value = "";
+        if (state.searchMode) navigate(state.path);
+      }
+    });
+
+    navigate("");
+  </script>
 </body>
 </html>
+```
