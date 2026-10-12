@@ -1,4 +1,4 @@
-```html
+
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -18,13 +18,14 @@
       --text: #eceef3;
       --muted: #9298a5;
       --accent: #8bb8ff;
-      --accent-bg: #202d42;
       --green: #8dd6ae;
       --danger: #f2a0a6;
       --radius: 12px;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -37,13 +38,25 @@
       line-height: 1.65;
     }
 
-    button, input { font: inherit; }
-    button { cursor: pointer; }
-    button:focus-visible, input:focus-visible, a:focus-visible {
+    button, input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button:focus-visible,
+    input:focus-visible,
+    a:focus-visible {
       outline: 2px solid var(--accent);
       outline-offset: 3px;
     }
-    a { color: inherit; text-decoration: none; }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
     .app {
       width: min(100% - 40px, 980px);
@@ -51,7 +64,6 @@
       padding: 26px 0 48px;
     }
 
-    /* 頂部 */
     .header {
       display: flex;
       align-items: center;
@@ -106,8 +118,9 @@
       background: var(--surface-hover);
     }
 
-    /* 搜尋 */
-    .search-section { margin-bottom: 24px; }
+    .search-section {
+      margin-bottom: 24px;
+    }
 
     .search-form {
       display: flex;
@@ -116,11 +129,13 @@
       padding: 5px;
       border: 1px solid #343842;
       border-radius: 12px;
-      background: #17191e;
+      background: var(--surface);
       transition: border-color .15s;
     }
 
-    .search-form:focus-within { border-color: #607da8; }
+    .search-form:focus-within {
+      border-color: #607da8;
+    }
 
     .search-icon {
       flex-shrink: 0;
@@ -140,7 +155,9 @@
       font-size: 14px;
     }
 
-    .search-input::placeholder { color: #737987; }
+    .search-input::placeholder {
+      color: #737987;
+    }
 
     .search-button {
       min-height: 36px;
@@ -152,12 +169,18 @@
       background: #b1ceff;
       font-size: 12px;
       font-weight: 700;
-      transition: background .15s;
     }
 
-    .search-button:hover { background: #c7dcff; }
+    .search-button:hover {
+      background: #c7dcff;
+    }
 
-    /* 工具列與課程內容 */
+    .button:disabled,
+    .search-button:disabled {
+      cursor: not-allowed;
+      opacity: .4;
+    }
+
     .toolbar {
       display: flex;
       align-items: center;
@@ -166,7 +189,8 @@
       margin-bottom: 17px;
     }
 
-    .toolbar-left, .toolbar-right {
+    .toolbar-left,
+    .toolbar-right {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
@@ -193,11 +217,6 @@
       background: var(--surface-hover);
     }
 
-    .button:disabled {
-      cursor: not-allowed;
-      opacity: .4;
-    }
-
     .breadcrumb {
       display: flex;
       flex-wrap: wrap;
@@ -216,8 +235,13 @@
       background: transparent;
     }
 
-    .breadcrumb button:hover { color: var(--accent); }
-    .breadcrumb .current { color: #e0e4ec; }
+    .breadcrumb button:hover {
+      color: var(--accent);
+    }
+
+    .breadcrumb .current {
+      color: #e0e4ec;
+    }
 
     .section-heading {
       display: flex;
@@ -253,10 +277,14 @@
       overflow-wrap: anywhere;
     }
 
-    .status.error { color: var(--danger); }
-    .status.success { color: var(--green); }
+    .status.error {
+      color: var(--danger);
+    }
 
-    /* 資料夾與檔案卡片 */
+    .status.success {
+      color: var(--green);
+    }
+
     .file-list {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -284,34 +312,30 @@
       background: var(--surface-hover);
     }
 
+    /* Emoji 圖示：不再使用彩色方塊 */
     .file-icon {
       display: grid;
       place-items: center;
-      width: 39px;
-      height: 39px;
+      width: 37px;
+      height: 37px;
       flex-shrink: 0;
-      border: 1px solid #3a3e48;
-      border-radius: 10px;
-      color: #c2c8d4;
-      background: #20232a;
-      font-size: 17px;
+      border: none;
+      border-radius: 0;
+      color: inherit;
+      background: transparent;
+      font-size: 23px;
     }
 
-    .file-icon.folder {
-      border-color: #35465c;
-      color: var(--accent);
-      background: var(--accent-bg);
-    }
-
+    .file-icon.folder,
     .file-icon.code {
-      border-color: #30463c;
-      color: var(--green);
-      background: #1c2b23;
-      font-family: monospace;
-      font-size: 12px;
+      border: none;
+      background: transparent;
     }
 
-    .file-info { flex: 1; min-width: 0; }
+    .file-info {
+      flex: 1;
+      min-width: 0;
+    }
 
     .file-name {
       display: block;
@@ -337,13 +361,14 @@
       font-size: 18px;
     }
 
-    /* 搜尋結果 */
     .result-card {
       align-items: flex-start;
       min-height: 0;
     }
 
-    .result-card .file-icon { margin-top: 1px; }
+    .result-card .file-icon {
+      margin-top: 1px;
+    }
 
     .snippet {
       display: block;
@@ -366,8 +391,8 @@
       background: #4b3b20;
     }
 
-    /* 程式碼閱讀 */
     .code-panel {
+      grid-column: 1 / -1;
       overflow: hidden;
       border: 1px solid var(--border);
       border-radius: var(--radius);
@@ -399,7 +424,9 @@
       gap: 6px;
     }
 
-    .code-actions .button { min-height: 30px; }
+    .code-actions .button {
+      min-height: 30px;
+    }
 
     pre {
       max-height: 68vh;
@@ -416,7 +443,6 @@
       -webkit-overflow-scrolling: touch;
     }
 
-    /* 空畫面 */
     .empty {
       grid-column: 1 / -1;
       padding: 34px 15px;
@@ -433,14 +459,31 @@
       font-size: 14px;
     }
 
-    .empty p { margin: 0; font-size: 12px; }
+    .empty p {
+      margin: 0;
+      font-size: 12px;
+    }
 
     @media (min-width: 1100px) {
-      .app { padding-top: 34px; }
-      .header { margin-bottom: 34px; }
-      .search-section { margin-bottom: 28px; }
-      .file-list { gap: 12px; }
-      .file-card { padding: 15px; }
+      .app {
+        padding-top: 34px;
+      }
+
+      .header {
+        margin-bottom: 34px;
+      }
+
+      .search-section {
+        margin-bottom: 28px;
+      }
+
+      .file-list {
+        gap: 12px;
+      }
+
+      .file-card {
+        padding: 15px;
+      }
     }
 
     @media (max-width: 640px) {
@@ -450,9 +493,19 @@
         padding-bottom: 30px;
       }
 
-      .header { margin-bottom: 23px; }
-      .brand { gap: 9px; font-size: 18px; }
-      .brand-icon { width: 35px; height: 35px; }
+      .header {
+        margin-bottom: 23px;
+      }
+
+      .brand {
+        gap: 9px;
+        font-size: 18px;
+      }
+
+      .brand-icon {
+        width: 35px;
+        height: 35px;
+      }
 
       .github-link {
         width: 35px;
@@ -462,19 +515,48 @@
         font-size: 0;
       }
 
-      .github-link::first-letter { font-size: 16px; }
+      .github-link::first-letter {
+        font-size: 16px;
+      }
 
-      .search-section { margin-bottom: 21px; }
-      .search-form { gap: 5px; }
-      .search-input { font-size: 13px; }
-      .search-button { padding: 7px 10px; }
+      .search-section {
+        margin-bottom: 21px;
+      }
 
-      .toolbar { margin-bottom: 15px; }
-      .toolbar-left, .toolbar-right { gap: 6px; }
-      .button { min-height: 33px; padding: 6px 9px; }
+      .search-form {
+        gap: 5px;
+      }
 
-      .section-heading h1 { font-size: 17px; }
-      .file-list { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+      .search-input {
+        font-size: 13px;
+      }
+
+      .search-button {
+        padding: 7px 10px;
+      }
+
+      .toolbar {
+        margin-bottom: 15px;
+      }
+
+      .toolbar-left,
+      .toolbar-right {
+        gap: 6px;
+      }
+
+      .button {
+        min-height: 33px;
+        padding: 6px 9px;
+      }
+
+      .section-heading h1 {
+        font-size: 17px;
+      }
+
+      .file-list {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 8px;
+      }
 
       .file-card {
         min-height: 64px;
@@ -487,23 +569,55 @@
         height: 36px;
       }
 
-      .result-card { align-items: flex-start; }
-      .snippet { font-size: 10px; }
-      .code-toolbar { align-items: flex-start; }
-      .code-filename { width: 100%; }
-      pre { padding: 13px; font-size: 11px; }
+      .result-card {
+        align-items: flex-start;
+      }
+
+      .snippet {
+        font-size: 10px;
+      }
+
+      .code-toolbar {
+        align-items: flex-start;
+      }
+
+      .code-filename {
+        width: 100%;
+      }
+
+      pre {
+        padding: 13px;
+        font-size: 11px;
+      }
     }
 
     @media (max-width: 360px) {
-      .app { width: calc(100% - 22px); }
-      .brand { font-size: 17px; }
-      .search-button { padding: 6px 8px; }
-      .toolbar-left { gap: 5px; }
-      .button { padding: 5px 7px; font-size: 11px; }
+      .app {
+        width: calc(100% - 22px);
+      }
+
+      .brand {
+        font-size: 17px;
+      }
+
+      .search-button {
+        padding: 6px 8px;
+      }
+
+      .toolbar-left {
+        gap: 5px;
+      }
+
+      .button {
+        padding: 5px 7px;
+        font-size: 11px;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
+      *,
+      *::before,
+      *::after {
         transition: none !important;
         scroll-behavior: auto !important;
       }
@@ -578,12 +692,17 @@
     const REPO = "bash-course";
     const BRANCH = "main";
 
-    const API_ROOT = `https://api.github.com/repos/${OWNER}/${REPO}`;
-    const RAW_ROOT = `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}`;
-    const REPO_ROOT = `https://github.com/${OWNER}/${REPO}`;
+    const API_ROOT =
+      `https://api.github.com/repos/${OWNER}/${REPO}`;
+    const RAW_ROOT =
+      `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}`;
+    const REPO_ROOT =
+      `https://github.com/${OWNER}/${REPO}`;
 
-    const SEARCH_EXTENSIONS = new Set(["sh", "bash", "zsh", "md", "txt"]);
-    const IGNORED_ROOT_FILES = new Set(["README.md", "index.html"]);
+    const SEARCH_EXTENSIONS =
+      new Set(["sh", "bash", "zsh", "md", "txt"]);
+    const IGNORED_ROOT_FILES =
+      new Set(["README.md", "index.html"]);
 
     const $ = (id) => document.getElementById(id);
 
@@ -623,6 +742,7 @@
         .filter(Boolean)
         .map(encodeURIComponent)
         .join("/");
+
       return `${API_ROOT}/contents/${encoded}?ref=${encodeURIComponent(BRANCH)}`;
     }
 
@@ -640,10 +760,6 @@
       el.textContent = message;
     }
 
-    function setBusyStatus(message) {
-      setStatus(message);
-    }
-
     function setBusy(value) {
       state.busy = value;
       $("homeBtn").disabled = value;
@@ -654,7 +770,8 @@
     }
 
     function updateBackButton() {
-      $("backBtn").disabled = state.busy || state.history.length === 0;
+      $("backBtn").disabled =
+        state.busy || state.history.length === 0;
     }
 
     function rememberView() {
@@ -668,13 +785,19 @@
       let html = `<button type="button" data-path="">首頁</button>`;
 
       for (let i = 0; i < parts.length; i++) {
-        accumulated = accumulated ? `${accumulated}/${parts[i]}` : parts[i];
+        accumulated = accumulated
+          ? `${accumulated}/${parts[i]}`
+          : parts[i];
+
         html += `<span>/</span>`;
 
         if (i === parts.length - 1) {
           html += `<span class="current">${escapeHtml(parts[i])}</span>`;
         } else {
-          html += `<button type="button" data-path="${escapeHtml(accumulated)}">${escapeHtml(parts[i])}</button>`;
+          html += `
+            <button type="button" data-path="${escapeHtml(accumulated)}">
+              ${escapeHtml(parts[i])}
+            </button>`;
         }
       }
 
@@ -683,9 +806,10 @@
       $("breadcrumb").querySelectorAll("button[data-path]").forEach((button) => {
         button.addEventListener("click", () => {
           const target = button.dataset.path;
+
           if (target !== state.path || state.view.type !== "folder") {
             rememberView();
-            showFolder(target, false);
+            showFolder(target);
           }
         });
       });
@@ -722,13 +846,20 @@
       return labels[ext] || (ext ? `${ext.toUpperCase()} 檔案` : "檔案");
     }
 
+    /* Emoji 圖示 */
     function itemIcon(item) {
-      if (isFolder(item)) return ["folder", "▰"];
+      if (isFolder(item)) return ["folder", "📁"];
+
       const ext = extension(item.path || item.name || "");
 
-      if (["sh", "bash", "zsh"].includes(ext)) return ["code", "</>"];
-      if (["md", "txt"].includes(ext)) return ["", "≡"];
-      return ["", "◇"];
+      if (["sh", "bash", "zsh"].includes(ext)) {
+        return ["code", "💻"];
+      }
+
+      if (ext === "md") return ["", "📝"];
+      if (ext === "txt") return ["", "📄"];
+
+      return ["", "📃"];
     }
 
     function renderItems(items) {
@@ -742,6 +873,7 @@
       $("content").innerHTML = items.map((item, index) => {
         const [iconClass, icon] = itemIcon(item);
         const name = item.name || basename(item.path || "");
+
         return `
           <button class="file-card" type="button" data-index="${index}">
             <span class="file-icon ${iconClass}">${icon}</span>
@@ -761,9 +893,9 @@
           rememberView();
 
           if (isFolder(item)) {
-            showFolder(item.path, false);
+            showFolder(item.path);
           } else {
-            openFile(item.path, false);
+            openFile(item.path);
           }
         });
       });
@@ -778,20 +910,21 @@
         if (response.status === 403) {
           throw new Error("GitHub 請求次數可能已達限制，請稍後再試。");
         }
+
         if (response.status === 404) {
           throw new Error("找不到資料，請確認專案為公開狀態，且分支名稱為 main。");
         }
+
         throw new Error(`GitHub 請求失敗（HTTP ${response.status}）。`);
       }
 
       return response.json();
     }
 
-    async function showFolder(path = "", pushHistory = false) {
+    async function showFolder(path = "") {
       if (state.busy) return;
 
       const target = (path || "").replace(/^\/+|\/+$/g, "");
-      if (pushHistory) rememberView();
 
       state.requestId++;
       state.path = target;
@@ -801,10 +934,10 @@
       $("sectionTitle").textContent = target ? basename(target) : "課程檔案";
       $("content").innerHTML = "";
       $("count").textContent = "載入中";
+
       showBreadcrumb(target);
-      updateBackButton();
       setBusy(true);
-      setBusyStatus("正在讀取課程檔案……");
+      setStatus("正在讀取課程檔案……");
 
       try {
         const data = await fetchJson(apiUrl(target));
@@ -839,9 +972,8 @@
       }
     }
 
-    async function openFile(path, pushHistory = false) {
+    async function openFile(path) {
       if (state.busy) return;
-      if (pushHistory) rememberView();
 
       const requestId = ++state.requestId;
       const parentPath = path.split("/").slice(0, -1).join("/");
@@ -852,28 +984,34 @@
       $("sectionTitle").textContent = basename(path);
       $("count").textContent = "讀取中";
       $("content").innerHTML = "";
+
       showBreadcrumb(parentPath);
       setBusy(true);
-      setBusyStatus("正在讀取檔案內容……");
+      setStatus("正在讀取檔案內容……");
 
       try {
         const response = await fetch(rawUrl(path));
+
         if (!response.ok) {
           throw new Error(`無法讀取檔案（HTTP ${response.status}）。`);
         }
 
         const text = await response.text();
+
         if (requestId !== state.requestId) return;
 
         $("count").textContent = `${text.length.toLocaleString()} 字元`;
+
         $("content").innerHTML = `
-          <div class="code-panel" style="grid-column:1/-1">
+          <div class="code-panel">
             <div class="code-toolbar">
               <span class="code-filename">${escapeHtml(path)}</span>
               <div class="code-actions">
                 <button class="button" id="copyBtn" type="button">複製程式碼</button>
-                <a class="button" href="${escapeHtml(githubFileUrl(path))}"
-                   target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+                <a class="button"
+                   href="${escapeHtml(githubFileUrl(path))}"
+                   target="_blank"
+                   rel="noopener noreferrer">GitHub ↗</a>
               </div>
             </div>
             <pre><code id="codeContent">${escapeHtml(text)}</code></pre>
@@ -883,6 +1021,7 @@
           try {
             await copyText(text);
             $("copyBtn").textContent = "已複製 ✓";
+
             setTimeout(() => {
               const button = $("copyBtn");
               if (button) button.textContent = "複製程式碼";
@@ -927,9 +1066,10 @@
       if (state.searchPromise) return state.searchPromise;
 
       state.searchPromise = (async () => {
-        setBusyStatus("第一次搜尋正在建立索引，請稍候……");
+        setStatus("第一次搜尋正在建立索引，請稍候……");
 
-        const url = `${API_ROOT}/git/trees/${encodeURIComponent(BRANCH)}?recursive=1`;
+        const url =
+          `${API_ROOT}/git/trees/${encodeURIComponent(BRANCH)}?recursive=1`;
         const treeData = await fetchJson(url);
 
         if (treeData.truncated) {
@@ -945,7 +1085,6 @@
 
         const index = [];
         let next = 0;
-        let finished = 0;
 
         async function worker() {
           while (next < files.length) {
@@ -953,8 +1092,10 @@
 
             try {
               const response = await fetch(rawUrl(item.path));
+
               if (response.ok) {
                 const text = await response.text();
+
                 index.push({
                   name: basename(item.path),
                   path: item.path,
@@ -965,19 +1106,11 @@
             } catch (error) {
               console.warn("略過無法讀取的檔案：", item.path, error);
             }
-
-            finished++;
-            if (finished % 8 === 0 || finished === files.length) {
-              setBusyStatus(`建立搜尋索引中…… ${finished}/${files.length}`);
-            }
           }
         }
 
         await Promise.all(
-          Array.from(
-            { length: Math.min(6, files.length) },
-            () => worker()
-          )
+          Array.from({ length: 6 }, () => worker())
         );
 
         state.searchIndex = index;
@@ -997,7 +1130,7 @@
 
       for (const term of terms) {
         position = lower.indexOf(term);
-        if (position !== -1) break;
+        if (position >= 0) break;
       }
 
       if (position < 0) position = 0;
@@ -1014,7 +1147,9 @@
 
     function highlight(text, terms) {
       let result = escapeHtml(text);
-      const uniqueTerms = [...new Set(terms)].sort((a, b) => b.length - a.length);
+
+      const uniqueTerms = [...new Set(terms)]
+        .sort((a, b) => b.length - a.length);
 
       for (const term of uniqueTerms) {
         const safe = escapeHtml(term);
@@ -1033,6 +1168,43 @@
       return result;
     }
 
+    function renderSearchResults(matches, terms) {
+      const shown = matches.slice(0, 100);
+      $("count").textContent = `${matches.length} 筆`;
+
+      if (!shown.length) {
+        showEmpty("找不到符合的內容", "換個關鍵字試試，例如 if、read、變數或檔案檢查。");
+      } else {
+        $("content").innerHTML = shown.map((item, index) => `
+          <button class="file-card result-card" type="button" data-index="${index}">
+            <span class="file-icon code">💻</span>
+            <span class="file-info">
+              <span class="file-name">${highlight(item.name, terms)}</span>
+              <span class="file-meta">${escapeHtml(item.path)}</span>
+              <span class="snippet">${highlight(makeSnippet(item.text, terms), terms)}</span>
+            </span>
+          </button>
+        `).join("");
+
+        $("content").querySelectorAll(".result-card").forEach((card) => {
+          card.addEventListener("click", () => {
+            const item = shown[Number(card.dataset.index)];
+            if (!item) return;
+
+            rememberView();
+            openFile(item.path);
+          });
+        });
+      }
+
+      setStatus(
+        matches.length > 100
+          ? `找到 ${matches.length} 筆，目前顯示前 100 筆。`
+          : `共找到 ${matches.length} 筆。`,
+        "success"
+      );
+    }
+
     async function searchAll() {
       const query = $("searchInput").value.trim();
 
@@ -1045,64 +1217,84 @@
       if (state.busy) return;
 
       rememberView();
+
       const requestId = ++state.requestId;
       const terms = query.toLocaleLowerCase().split(/\s+/).filter(Boolean);
 
       state.view = { type: "search", query };
+
       $("sectionTitle").textContent = "搜尋結果";
       $("content").innerHTML = "";
       $("count").textContent = "搜尋中";
+
       showBreadcrumb("");
       setBusy(true);
-      setBusyStatus("正在搜尋所有課程檔案……");
+      setStatus("正在搜尋所有課程檔案……");
 
       try {
         const index = await buildSearchIndex();
+
         if (requestId !== state.requestId) return;
 
         const matches = index
-          .filter((item) => terms.every((term) => item.searchable.includes(term)))
+          .filter((item) =>
+            terms.every((term) => item.searchable.includes(term))
+          )
           .sort((a, b) => {
             const aName = a.name.toLocaleLowerCase().includes(terms[0]) ? 0 : 1;
             const bName = b.name.toLocaleLowerCase().includes(terms[0]) ? 0 : 1;
+
             return aName - bName || a.path.localeCompare(b.path, "zh-Hant", {
               numeric: true
             });
           });
 
-        const shown = matches.slice(0, 100);
-        $("count").textContent = `${matches.length} 筆`;
+        renderSearchResults(matches, terms);
+      } catch (error) {
+        $("count").textContent = "搜尋失敗";
+        showEmpty("搜尋失敗", error.message || "請稍後再試。");
+        setStatus(error.message || "無法建立搜尋索引。", "error");
+      } finally {
+        setBusy(false);
+        updateBackButton();
+      }
+    }
 
-        if (!shown.length) {
-          showEmpty("找不到符合的內容", "換個關鍵字試試，例如 if、read、變數或檔案檢查。");
-        } else {
-          $("content").innerHTML = shown.map((item, index) => `
-            <button class="file-card result-card" type="button" data-index="${index}">
-              <span class="file-icon code">&lt;/&gt;</span>
-              <span class="file-info">
-                <span class="file-name">${highlight(item.name, terms)}</span>
-                <span class="file-meta">${escapeHtml(item.path)}</span>
-                <span class="snippet">${highlight(makeSnippet(item.text, terms), terms)}</span>
-              </span>
-            </button>
-          `).join("");
+    async function searchAllWithoutHistory(query) {
+      if (state.busy) return;
 
-          $("content").querySelectorAll(".result-card").forEach((card) => {
-            card.addEventListener("click", () => {
-              const item = shown[Number(card.dataset.index)];
-              if (!item) return;
-              rememberView();
-              openFile(item.path, false);
+      const requestId = ++state.requestId;
+      const terms = query.toLocaleLowerCase().split(/\s+/).filter(Boolean);
+
+      state.view = { type: "search", query };
+
+      $("sectionTitle").textContent = "搜尋結果";
+      $("content").innerHTML = "";
+      $("count").textContent = "搜尋中";
+
+      showBreadcrumb("");
+      setBusy(true);
+      setStatus("正在搜尋所有課程檔案……");
+
+      try {
+        const index = await buildSearchIndex();
+
+        if (requestId !== state.requestId) return;
+
+        const matches = index
+          .filter((item) =>
+            terms.every((term) => item.searchable.includes(term))
+          )
+          .sort((a, b) => {
+            const aName = a.name.toLocaleLowerCase().includes(terms[0]) ? 0 : 1;
+            const bName = b.name.toLocaleLowerCase().includes(terms[0]) ? 0 : 1;
+
+            return aName - bName || a.path.localeCompare(b.path, "zh-Hant", {
+              numeric: true
             });
           });
-        }
 
-        setStatus(
-          matches.length > 100
-            ? `找到 ${matches.length} 筆，目前顯示前 100 筆。`
-            : `共找到 ${matches.length} 筆。`,
-          "success"
-        );
+        renderSearchResults(matches, terms);
       } catch (error) {
         $("count").textContent = "搜尋失敗";
         showEmpty("搜尋失敗", error.message || "請稍後再試。");
@@ -1115,6 +1307,7 @@
 
     function goHome() {
       if (state.busy) return;
+
       state.history = [];
       showFolder("");
     }
@@ -1135,72 +1328,6 @@
       }
     }
 
-    async function searchAllWithoutHistory(query) {
-      if (state.busy) return;
-
-      const requestId = ++state.requestId;
-      const terms = query.toLocaleLowerCase().split(/\s+/).filter(Boolean);
-
-      state.view = { type: "search", query };
-      $("sectionTitle").textContent = "搜尋結果";
-      $("content").innerHTML = "";
-      $("count").textContent = "搜尋中";
-      showBreadcrumb("");
-      setBusy(true);
-      setBusyStatus("正在搜尋所有課程檔案……");
-
-      try {
-        const index = await buildSearchIndex();
-        if (requestId !== state.requestId) return;
-
-        const matches = index
-          .filter((item) => terms.every((term) => item.searchable.includes(term)))
-          .sort((a, b) => {
-            const aName = a.name.toLocaleLowerCase().includes(terms[0]) ? 0 : 1;
-            const bName = b.name.toLocaleLowerCase().includes(terms[0]) ? 0 : 1;
-            return aName - bName || a.path.localeCompare(b.path, "zh-Hant", {
-              numeric: true
-            });
-          });
-
-        const shown = matches.slice(0, 100);
-        $("count").textContent = `${matches.length} 筆`;
-
-        if (!shown.length) {
-          showEmpty("找不到符合的內容", "換個關鍵字試試。");
-        } else {
-          $("content").innerHTML = shown.map((item, index) => `
-            <button class="file-card result-card" type="button" data-index="${index}">
-              <span class="file-icon code">&lt;/&gt;</span>
-              <span class="file-info">
-                <span class="file-name">${highlight(item.name, terms)}</span>
-                <span class="file-meta">${escapeHtml(item.path)}</span>
-                <span class="snippet">${highlight(makeSnippet(item.text, terms), terms)}</span>
-              </span>
-            </button>
-          `).join("");
-
-          $("content").querySelectorAll(".result-card").forEach((card) => {
-            card.addEventListener("click", () => {
-              const item = shown[Number(card.dataset.index)];
-              if (!item) return;
-              rememberView();
-              openFile(item.path);
-            });
-          });
-        }
-
-        setStatus(`共找到 ${matches.length} 筆。`, "success");
-      } catch (error) {
-        $("count").textContent = "搜尋失敗";
-        showEmpty("搜尋失敗", error.message || "請稍後再試。");
-        setStatus(error.message || "無法建立搜尋索引。", "error");
-      } finally {
-        setBusy(false);
-        updateBackButton();
-      }
-    }
-
     $("searchForm").addEventListener("submit", (event) => {
       event.preventDefault();
       searchAll();
@@ -1211,16 +1338,21 @@
 
     $("refreshBtn").addEventListener("click", () => {
       if (state.busy) return;
+
       state.history = [];
       state.searchIndex = null;
       state.searchPromise = null;
+
       showFolder("");
     });
 
     $("searchInput").addEventListener("keydown", (event) => {
       if (event.key === "Escape") {
         $("searchInput").value = "";
-        if (state.view.type === "search") goBack();
+
+        if (state.view.type === "search") {
+          goBack();
+        }
       }
     });
 
@@ -1228,4 +1360,3 @@
   </script>
 </body>
 </html>
-```
