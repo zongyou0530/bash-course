@@ -49,6 +49,7 @@ body {
 
 button, input { font: inherit; }
 button { color: inherit; }
+
 button:focus-visible, input:focus-visible {
   outline: 2px solid var(--cyan);
   outline-offset: 3px;
@@ -1037,6 +1038,16 @@ mark {
     ".git", "node_modules", ".github", "vendor", "dist", "build"
   ]);
 
+  // 只隱藏根目錄的這兩個檔案，不影響子資料夾中的同名檔案。
+  const HIDDEN_ROOT_FILES = new Set([
+    "index.html",
+    "README.md"
+  ]);
+
+  function isHiddenRootFile(path) {
+    return !path.includes("/") && HIDDEN_ROOT_FILES.has(path);
+  }
+
   function escapeHTML(value) {
     return String(value ?? "").replace(/[&<>"']/g, (char) => ({
       "&": "&amp;",
@@ -1121,6 +1132,7 @@ mark {
       headers: { "Accept": "application/vnd.github+json" },
       cache: "no-store"
     });
+
     if (!response.ok) {
       let detail = "";
       try {
@@ -1129,6 +1141,7 @@ mark {
       } catch {}
       throw new Error(`GitHub API ${response.status}${detail ? ": " + detail : ""}`);
     }
+
     return response.json();
   }
 
@@ -1145,6 +1158,7 @@ mark {
   async function loadRepository() {
     if (loading) return;
     loading = true;
+
     setStatus("連線中");
     treeEl.innerHTML = `<div class="loading-line"><span class="spinner"></span>正在讀取資料夾……</div>`;
     setLoading("正在連接 GitHub 資料庫……");
@@ -1169,7 +1183,11 @@ mark {
       }
 
       allFiles = data.tree
-        .filter(item => item.type === "blob" && !item.path.split("/").some(part => SKIP_DIRS.has(part)))
+        .filter(item =>
+          item.type === "blob" &&
+          !item.path.split("/").some(part => SKIP_DIRS.has(part)) &&
+          !isHiddenRootFile(item.path)
+        )
         .map(item => ({
           path: item.path,
           name: item.path.split("/").pop(),
@@ -1185,12 +1203,14 @@ mark {
       currentFile = null;
       searchInput.value = "";
       clearSearchBtn.classList.remove("visible");
+
       setStatus("已連線");
       renderTree();
       renderFolder("");
     } catch (error) {
       console.error(error);
       setStatus("連線失敗", false);
+
       treeEl.innerHTML = `
         <div class="empty-state">
           <div class="empty-symbol">!</div>
@@ -1198,14 +1218,18 @@ mark {
           <div class="empty-desc">${escapeHTML(error.message)}<br><br>請確認網路連線與 GitHub 專案是否公開。</div>
           <button class="retry-btn" id="treeRetry">重新載入</button>
         </div>`;
+
       $("#treeRetry")?.addEventListener("click", loadRepository);
+
       headerEl.innerHTML = `
         <div class="content-title-wrap">
           <div class="content-kicker">CONNECTION ERROR</div>
           <h2 class="content-title">無法連線</h2>
           <div class="content-subtitle">請稍後再試。</div>
         </div>`;
+
       crumbsEl.innerHTML = "";
+
       contentEl.innerHTML = `
         <div class="empty-state">
           <div class="empty-symbol">↻</div>
@@ -1213,6 +1237,7 @@ mark {
           <div class="empty-desc">可能是 GitHub API 暫時無法使用，或已達匿名 API 請求限制。</div>
           <button class="retry-btn" id="mainRetry">重新載入</button>
         </div>`;
+
       $("#mainRetry")?.addEventListener("click", loadRepository);
     } finally {
       loading = false;
@@ -1225,13 +1250,17 @@ mark {
     const files = [];
 
     for (const file of allFiles) {
+      if (isHiddenRootFile(file.path)) continue;
       if (!file.path.startsWith(prefix)) continue;
+
       const rest = file.path.slice(prefix.length);
       if (!rest) continue;
 
       const slash = rest.indexOf("/");
+
       if (slash >= 0) {
         const folderName = rest.slice(0, slash);
+
         if (!folders.has(folderName)) {
           folders.set(folderName, {
             name: folderName,
@@ -1245,8 +1274,10 @@ mark {
     }
 
     const items = [...folders.values(), ...files];
+
     items.sort((a, b) => {
       if (a.type !== b.type) return a.type === "tree" ? -1 : 1;
+
       return a.name.localeCompare(b.name, "zh-Hant", {
         numeric: true,
         sensitivity: "base"
@@ -1259,6 +1290,7 @@ mark {
 
   function renderTree() {
     const topFolders = getFolderItems("");
+
     if (!topFolders.length) {
       treeEl.innerHTML = `<div class="tree-empty">目前沒有可顯示的資料夾</div>`;
       return;
@@ -1278,10 +1310,13 @@ mark {
       button.addEventListener("click", () => {
         const path = button.dataset.path;
         const type = button.dataset.type;
+
         searchInput.value = "";
         clearSearchBtn.classList.remove("visible");
-        if (type === "tree") renderFolder(path);
-        else {
+
+        if (type === "tree") {
+          renderFolder(path);
+        } else {
           const file = allFiles.find(item => item.path === path);
           if (file) openFile(file);
         }
@@ -1301,6 +1336,7 @@ mark {
 
     parts.forEach((part, index) => {
       accumulated = accumulated ? accumulated + "/" + part : part;
+
       entries.push({
         label: part,
         path: accumulated,
@@ -1326,6 +1362,7 @@ mark {
   function renderFolder(path) {
     currentPath = path;
     currentFile = null;
+
     renderTree();
     renderBreadcrumbs(path);
 
@@ -1343,7 +1380,10 @@ mark {
       </div>`;
 
     $("#backFolderBtn")?.addEventListener("click", () => {
-      const parent = path.includes("/") ? path.slice(0, path.lastIndexOf("/")) : "";
+      const parent = path.includes("/")
+        ? path.slice(0, path.lastIndexOf("/"))
+        : "";
+
       renderFolder(parent);
     });
 
@@ -1360,8 +1400,11 @@ mark {
     contentEl.innerHTML = `<div class="file-list">${
       items.map((item, index) => {
         const isFolder = item.type === "tree";
-        const meta = isFolder ? "資料夾 · 點擊開啟" :
-          `${getExtension(item.path).toUpperCase() || "FILE"} 檔案${item.size ? " · " + formatSize(item.size) : ""}`;
+
+        const meta = isFolder
+          ? "資料夾 · 點擊開啟"
+          : `${getExtension(item.path).toUpperCase() || "FILE"} 檔案${item.size ? " · " + formatSize(item.size) : ""}`;
+
         return `
           <button class="file-row" data-path="${escapeHTML(item.path)}" data-type="${item.type}"
             style="animation-delay:${Math.min(index * 18, 220)}ms">
@@ -1378,8 +1421,10 @@ mark {
     contentEl.querySelectorAll(".file-row").forEach(button => {
       button.addEventListener("click", () => {
         const path = button.dataset.path;
-        if (button.dataset.type === "tree") renderFolder(path);
-        else {
+
+        if (button.dataset.type === "tree") {
+          renderFolder(path);
+        } else {
           const file = allFiles.find(item => item.path === path);
           if (file) openFile(file);
         }
@@ -1395,10 +1440,14 @@ mark {
 
   async function getFileContent(file) {
     if (contentCache.has(file.path)) return contentCache.get(file.path);
-    if (!isTextFile(file)) throw new Error("此檔案不是支援預覽的文字檔，或檔案大小超過 1 MB。");
+
+    if (!isTextFile(file)) {
+      throw new Error("此檔案不是支援預覽的文字檔，或檔案大小超過 1 MB。");
+    }
 
     const url = `${RAW_BASE}/${encodeURIComponent(branch)}/${file.path.split("/").map(encodeURIComponent).join("/")}`;
     const promise = fetchText(url);
+
     contentCache.set(file.path, promise);
 
     try {
@@ -1413,6 +1462,7 @@ mark {
 
   function getLanguage(file) {
     const ext = getExtension(file.path);
+
     const map = {
       sh: "bash", bash: "bash", zsh: "bash",
       md: "markdown", markdown: "markdown",
@@ -1427,15 +1477,21 @@ mark {
       csv: "plaintext", makefile: "makefile",
       dockerfile: "dockerfile"
     };
+
     return map[ext] || "plaintext";
   }
 
   function highlightCode(text, language) {
     if (!window.hljs) return escapeHTML(text);
+
     try {
       if (language !== "plaintext" && hljs.getLanguage(language)) {
-        return hljs.highlight(text, { language, ignoreIllegals: true }).value;
+        return hljs.highlight(text, {
+          language,
+          ignoreIllegals: true
+        }).value;
       }
+
       return escapeHTML(text);
     } catch {
       return escapeHTML(text);
@@ -1453,35 +1509,48 @@ mark {
     });
 
     const renderer = new marked.Renderer();
+
     renderer.link = function ({ href, title, text }) {
       const safe = safeURL(href || "");
       const titleAttr = title ? ` title="${escapeHTML(title)}"` : "";
+
       return `<a href="${escapeHTML(safe)}"${titleAttr} target="_blank" rel="noopener noreferrer">${text}</a>`;
     };
 
-    // 對 Markdown 產生的 HTML 做安全清理，避免執行嵌入的腳本。
     const raw = marked.parse(text, { renderer });
     const doc = new DOMParser().parseFromString(raw, "text/html");
 
-    doc.querySelectorAll("script, iframe, object, embed, form, input, button, video, audio").forEach(el => el.remove());
+    doc.querySelectorAll("script, iframe, object, embed, form, input, button, video, audio")
+      .forEach(el => el.remove());
 
     doc.querySelectorAll("*").forEach(el => {
       [...el.attributes].forEach(attr => {
         const name = attr.name.toLowerCase();
+
         if (name.startsWith("on") || name === "srcdoc" || name === "style") {
           el.removeAttribute(attr.name);
         }
+
         if (["href", "src", "xlink:href"].includes(name)) {
           const safe = safeURL(attr.value);
-          if (safe === "#") el.removeAttribute(attr.name);
-          else el.setAttribute(attr.name, safe);
+
+          if (safe === "#") {
+            el.removeAttribute(attr.name);
+          } else {
+            el.setAttribute(attr.name, safe);
+          }
         }
       });
     });
 
     doc.querySelectorAll("pre code").forEach(code => {
-      const className = [...code.classList].find(name => name.startsWith("language-"));
-      const language = className ? className.slice(9) : "plaintext";
+      const className = [...code.classList]
+        .find(name => name.startsWith("language-"));
+
+      const language = className
+        ? className.slice(9)
+        : "plaintext";
+
       code.innerHTML = highlightCode(code.textContent, language);
       code.classList.add("hljs");
     });
@@ -1491,9 +1560,13 @@ mark {
 
   async function openFile(file) {
     currentFile = file;
-    currentPath = file.path.includes("/") ? file.path.slice(0, file.path.lastIndexOf("/")) : "";
+    currentPath = file.path.includes("/")
+      ? file.path.slice(0, file.path.lastIndexOf("/"))
+      : "";
+
     renderTree();
     renderBreadcrumbs(file.path);
+
     headerEl.innerHTML = `
       <div class="content-title-wrap">
         <div class="content-kicker">FILE / PREVIEW</div>
@@ -1516,9 +1589,15 @@ mark {
           <div class="empty-desc">這可能是圖片、壓縮檔或其他非文字格式。</div>
           <button class="retry-btn" id="openRawBtn">在 GitHub 查看</button>
         </div>`;
+
       $("#openRawBtn").addEventListener("click", () => {
-        window.open(`https://github.com/${OWNER}/${REPO}/blob/${branch}/${file.path.split("/").map(encodeURIComponent).join("/")}`, "_blank", "noopener,noreferrer");
+        window.open(
+          `https://github.com/${OWNER}/${REPO}/blob/${branch}/${file.path.split("/").map(encodeURIComponent).join("/")}`,
+          "_blank",
+          "noopener,noreferrer"
+        );
       });
+
       return;
     }
 
@@ -1526,6 +1605,7 @@ mark {
 
     try {
       const text = await getFileContent(file);
+
       if (currentFile?.path !== file.path) return;
 
       const language = getLanguage(file);
@@ -1553,7 +1633,9 @@ mark {
       $("#copyCodeBottom").addEventListener("click", () => copyText(text));
     } catch (error) {
       console.error(error);
+
       if (currentFile?.path !== file.path) return;
+
       contentEl.innerHTML = `
         <div class="empty-state">
           <div class="empty-symbol">!</div>
@@ -1561,6 +1643,7 @@ mark {
           <div class="empty-desc">${escapeHTML(error.message)}<br><br>請確認檔案是否存在，以及 GitHub 是否允許讀取。</div>
           <button class="retry-btn" id="fileRetry">重新載入檔案</button>
         </div>`;
+
       $("#fileRetry").addEventListener("click", () => openFile(file));
     }
   }
@@ -1574,12 +1657,16 @@ mark {
         textarea.value = text;
         textarea.style.position = "fixed";
         textarea.style.opacity = "0";
+
         document.body.appendChild(textarea);
         textarea.select();
+
         const success = document.execCommand("copy");
         textarea.remove();
+
         if (!success) throw new Error("複製失敗");
       }
+
       showToast("已複製到剪貼簿");
     } catch (error) {
       console.error(error);
@@ -1598,10 +1685,16 @@ mark {
 
   function highlightMatch(text, query) {
     const escaped = escapeHTML(text);
+
     if (!query) return escaped;
+
     const safeQuery = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
     try {
-      return escaped.replace(new RegExp(safeQuery, "ig"), match => `<mark>${match}</mark>`);
+      return escaped.replace(
+        new RegExp(safeQuery, "ig"),
+        match => `<mark>${match}</mark>`
+      );
     } catch {
       return escaped;
     }
@@ -1610,9 +1703,12 @@ mark {
   function snippetAround(text, query) {
     const lowerText = text.toLowerCase();
     const index = lowerText.indexOf(query.toLowerCase());
+
     if (index < 0) return "";
+
     const start = Math.max(0, index - 65);
     const end = Math.min(text.length, index + query.length + 105);
+
     return (start > 0 ? "…" : "") +
       text.slice(start, end).replace(/\s+/g, " ").trim() +
       (end < text.length ? "…" : "");
@@ -1620,6 +1716,7 @@ mark {
 
   async function searchAll(query, token) {
     const q = query.trim().toLowerCase();
+
     if (!q) {
       renderFolder(currentPath);
       return;
@@ -1631,34 +1728,52 @@ mark {
         <h2 class="content-title">搜尋結果</h2>
         <div class="content-subtitle">關鍵字：${escapeHTML(query.trim())}</div>
       </div>`;
+
     crumbsEl.innerHTML = "";
     setLoading("正在搜尋檔名與程式碼內容……");
 
+    // allFiles 已在載入時排除根目錄 index.html 與 README.md，
+    // 因此這兩個檔案不會出現在檔名搜尋或全文搜尋結果中。
     const candidates = allFiles.filter(file =>
-      file.path.toLowerCase().includes(q) || file.name.toLowerCase().includes(q)
+      !isHiddenRootFile(file.path) &&
+      (
+        file.path.toLowerCase().includes(q) ||
+        file.name.toLowerCase().includes(q)
+      )
     );
 
-    const searchable = allFiles.filter(isTextFile);
+    const searchable = allFiles.filter(file =>
+      !isHiddenRootFile(file.path) && isTextFile(file)
+    );
+
     const resultMap = new Map();
 
     candidates.forEach(file => {
-      resultMap.set(file.path, { file, snippet: "", matchedBy: "檔名或路徑" });
+      resultMap.set(file.path, {
+        file,
+        snippet: "",
+        matchedBy: "檔名或路徑"
+      });
     });
 
-    // 同時搜尋文字檔內容；使用並行數量限制避免一次送出過多請求。
     let index = 0;
     const workerCount = Math.min(8, searchable.length);
 
     async function worker() {
       while (index < searchable.length) {
         if (token !== searchToken) return;
+
         const file = searchable[index++];
+
         if (resultMap.has(file.path)) continue;
 
         try {
           const text = await getFileContent(file);
+
           if (token !== searchToken) return;
+
           const found = text.toLowerCase().indexOf(q);
+
           if (found >= 0) {
             resultMap.set(file.path, {
               file,
@@ -1667,13 +1782,15 @@ mark {
             });
           }
         } catch (error) {
-          // 單一檔案無法讀取時，仍繼續搜尋其他檔案。
           console.warn("略過無法搜尋的檔案：", file.path, error);
         }
       }
     }
 
-    await Promise.all(Array.from({ length: workerCount }, () => worker()));
+    await Promise.all(
+      Array.from({ length: workerCount }, () => worker())
+    );
+
     if (token !== searchToken) return;
 
     const results = [...resultMap.values()].sort((a, b) =>
@@ -1715,7 +1832,9 @@ mark {
     contentEl.querySelectorAll(".result-card").forEach(button => {
       button.addEventListener("click", () => {
         const file = allFiles.find(item => item.path === button.dataset.path);
-        if (!file) return;
+
+        if (!file || isHiddenRootFile(file.path)) return;
+
         searchInput.value = "";
         clearSearchBtn.classList.remove("visible");
         searchToken++;
@@ -1728,8 +1847,11 @@ mark {
 
   searchInput.addEventListener("input", () => {
     const query = searchInput.value;
+
     clearSearchBtn.classList.toggle("visible", Boolean(query));
+
     clearTimeout(searchTimer);
+
     const token = ++searchToken;
 
     if (!query.trim()) {
@@ -1762,11 +1884,18 @@ mark {
 
   document.addEventListener("keydown", event => {
     const target = event.target;
+
     const isTyping = target instanceof HTMLInputElement ||
       target instanceof HTMLTextAreaElement ||
       target.isContentEditable;
 
-    if (event.key === "/" && !isTyping && !event.ctrlKey && !event.metaKey && !event.altKey) {
+    if (
+      event.key === "/" &&
+      !isTyping &&
+      !event.ctrlKey &&
+      !event.metaKey &&
+      !event.altKey
+    ) {
       event.preventDefault();
       searchInput.focus();
     }
