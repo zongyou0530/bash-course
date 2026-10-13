@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#090b18">
-<title>BASH COURSE | 程式作業資料庫</title>
+<title>Learning Bash | 課程作業資料庫</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -89,6 +89,11 @@ button:disabled { opacity: .4; cursor: not-allowed; }
   50% { box-shadow: 0 0 26px rgba(139, 92, 246, .13); }
 }
 
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
 button {
   border: 0;
   cursor: pointer;
@@ -103,120 +108,155 @@ button:active { transform: scale(.98); }
   padding: 26px 34px 50px;
 }
 
-/* 頂部品牌列 */
+/* 首頁漸層主視覺卡片 */
 
-.topbar {
+.hero {
+  position: relative;
+  margin-bottom: 27px;
+  animation: appear .55s ease both;
+}
+
+.hero-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 28px 30px 25px;
+  border: 1px solid rgba(174, 170, 255, .25);
+  border-radius: 25px;
+  background:
+    radial-gradient(ellipse at 90% 0%, rgba(75, 190, 255, .18), transparent 42%),
+    radial-gradient(ellipse at 0% 100%, rgba(164, 110, 255, .2), transparent 45%),
+    linear-gradient(125deg, #171b3a 0%, #25204d 43%, #142e49 100%);
+  box-shadow:
+    0 24px 75px rgba(0, 0, 0, .27),
+    inset 0 1px rgba(255, 255, 255, .09);
+}
+
+.hero-card::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -145px;
+  right: -80px;
+  width: 350px;
+  height: 350px;
+  border: 1px solid rgba(190, 190, 255, .11);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 28px rgba(190, 190, 255, .025),
+    0 0 0 58px rgba(190, 190, 255, .02);
+  pointer-events: none;
+}
+
+.hero-card::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  right: 8%;
+  bottom: -180px;
+  width: 310px;
+  height: 250px;
+  border-radius: 50%;
+  background: rgba(66, 153, 225, .13);
+  filter: blur(55px);
+  pointer-events: none;
+}
+
+.hero-topline {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 42px;
+  gap: 15px;
+  margin-bottom: 32px;
 }
 
-.brand {
+.hero-kicker {
   display: flex;
   align-items: center;
-  gap: 13px;
-  min-width: 0;
+  gap: 10px;
+  color: #c1b7ff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .2em;
 }
 
-.brand-logo {
-  display: grid;
-  place-items: center;
-  width: 46px;
-  height: 46px;
-  flex-shrink: 0;
-  border: 1px solid rgba(180, 160, 255, .35);
-  border-radius: 14px;
-  background: linear-gradient(140deg, #8b5cf6, #4f46e5 58%, #2563eb);
-  box-shadow: 0 0 28px rgba(124, 92, 246, .25);
-  color: white;
-  font: 800 18px "JetBrains Mono", monospace;
+.hero-kicker::before {
+  content: "";
+  width: 25px;
+  height: 1px;
+  background: linear-gradient(90deg, #c4b5fd, #67e8f9);
 }
 
-.brand-name {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 800;
-  letter-spacing: .12em;
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
 }
-
-.brand-sub {
-  margin: 1px 0 0;
-  color: var(--muted);
-  font-size: 11px;
-  letter-spacing: .1em;
-}
-
-.top-actions { display: flex; align-items: center; gap: 9px; }
 
 .status {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 12px;
-  border: 1px solid var(--border);
+  padding: 7px 11px;
+  border: 1px solid rgba(211, 214, 255, .17);
   border-radius: 30px;
-  color: #b6c6df;
-  background: rgba(15, 20, 38, .6);
-  font-size: 12px;
+  color: #d2d8f2;
+  background: rgba(7, 11, 28, .24);
+  font-size: 11px;
   white-space: nowrap;
+  backdrop-filter: blur(12px);
 }
 
 .status-dot {
   width: 7px;
   height: 7px;
+  flex-shrink: 0;
   background: #4ade80;
   border-radius: 50%;
   box-shadow: 0 0 12px #4ade80;
 }
 
-/* 主視覺 */
-
-.hero {
-  position: relative;
-  padding: 0 0 31px;
-  animation: appear .55s ease both;
+.icon-btn {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border: 1px solid rgba(211, 214, 255, .18);
+  border-radius: 10px;
+  background: rgba(7, 11, 28, .24);
+  color: #d2d8f2;
 }
 
-.eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  color: #b5a4ff;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  margin-bottom: 14px;
-}
-
-.eyebrow::before {
-  content: "";
-  width: 25px;
-  height: 1px;
-  background: linear-gradient(90deg, var(--purple), var(--blue));
+.icon-btn:hover {
+  border-color: rgba(196, 181, 253, .6);
+  background: rgba(139, 92, 246, .2);
+  color: white;
 }
 
 .hero h1 {
   margin: 0;
-  font-size: clamp(32px, 4.5vw, 55px);
-  line-height: 1.2;
+  font-size: clamp(31px, 4.3vw, 49px);
+  line-height: 1.28;
   letter-spacing: -.045em;
   font-weight: 800;
 }
 
 .gradient-text {
-  background: linear-gradient(105deg, #c4b5fd 4%, #8b9cff 48%, #67e8f9 100%);
+  display: inline-block;
+  margin-top: 2px;
+  background: linear-gradient(105deg, #d2c5ff 0%, #a8b4ff 46%, #7be8f5 100%);
+  background-size: 180% 180%;
+  animation: gradientShift 9s ease infinite;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
 .hero-description {
-  margin: 14px 0 0;
-  color: #a1a7c2;
-  font-size: 14px;
+  margin: 13px 0 0;
+  color: #b0b9d8;
+  font-size: 13px;
   line-height: 1.9;
 }
 
@@ -224,7 +264,7 @@ button:active { transform: scale(.98); }
 
 .search-wrap {
   position: relative;
-  margin-top: 25px;
+  margin-top: 24px;
   max-width: 850px;
 }
 
@@ -232,22 +272,23 @@ button:active { transform: scale(.98); }
   display: flex;
   align-items: center;
   gap: 13px;
-  min-height: 61px;
+  min-height: 59px;
   padding: 8px 10px 8px 18px;
-  border: 1px solid rgba(167, 139, 250, .26);
-  border-radius: 17px;
-  background: rgba(17, 20, 41, .85);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, .17), inset 0 1px rgba(255,255,255,.025);
+  border: 1px solid rgba(191, 183, 255, .25);
+  border-radius: 15px;
+  background: rgba(8, 11, 28, .48);
+  box-shadow: inset 0 1px rgba(255,255,255,.035);
   backdrop-filter: blur(18px);
-  transition: border-color .25s, box-shadow .25s;
+  transition: border-color .25s, box-shadow .25s, background .25s;
 }
 
 .search-box:focus-within {
-  border-color: rgba(167, 139, 250, .7);
-  box-shadow: 0 0 0 4px rgba(139, 92, 246, .08), 0 12px 45px rgba(0,0,0,.2);
+  border-color: rgba(167, 139, 250, .75);
+  background: rgba(8, 11, 28, .68);
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, .09);
 }
 
-.search-icon { color: #a78bfa; flex-shrink: 0; }
+.search-icon { color: #b9a8ff; flex-shrink: 0; }
 
 .search-box input {
   flex: 1;
@@ -256,16 +297,16 @@ button:active { transform: scale(.98); }
   outline: 0;
   color: var(--text);
   background: transparent;
-  font-size: 14px;
+  font-size: 13px;
 }
 
-.search-box input::placeholder { color: #777e9f; }
+.search-box input::placeholder { color: #9098b7; }
 
 .search-shortcut {
   padding: 4px 7px;
-  border: 1px solid rgba(255,255,255,.09);
+  border: 1px solid rgba(255,255,255,.12);
   border-radius: 6px;
-  color: #8d93b0;
+  color: #a7afce;
   font: 11px "JetBrains Mono", monospace;
   white-space: nowrap;
 }
@@ -287,7 +328,7 @@ button:active { transform: scale(.98); }
   grid-template-columns: 310px minmax(0, 1fr);
   gap: 20px;
   align-items: start;
-  margin-top: 27px;
+  margin-top: 0;
 }
 
 .panel {
@@ -328,24 +369,6 @@ button:active { transform: scale(.98); }
   border-radius: 9px;
   background: rgba(139,92,246,.1);
   color: #b8a5ff;
-}
-
-.icon-btn {
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  flex-shrink: 0;
-  border: 1px solid rgba(159,155,255,.13);
-  border-radius: 10px;
-  background: rgba(255,255,255,.025);
-  color: #a9afcc;
-}
-
-.icon-btn:hover {
-  border-color: var(--border-hover);
-  background: rgba(139,92,246,.12);
-  color: white;
 }
 
 .tree-content { padding: 10px; }
@@ -592,6 +615,7 @@ button:active { transform: scale(.98); }
 }
 
 .result-path {
+  display: block;
   margin-top: 4px;
   color: #898fb0;
   font-size: 10px;
@@ -609,12 +633,6 @@ button:active { transform: scale(.98); }
   font: 11px/1.7 "JetBrains Mono", monospace;
   overflow-wrap: anywhere;
   white-space: pre-wrap;
-}
-
-mark {
-  border-radius: 3px;
-  background: rgba(139,92,246,.25);
-  color: #e4d9ff;
 }
 
 .loading-line {
@@ -834,19 +852,13 @@ mark {
 
 .footer {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 25px;
-  padding: 17px 3px;
+  margin-top: 22px;
+  padding: 15px 3px;
   color: #666e8e;
   font-size: 10px;
-}
-
-.footer-brand {
-  color: #9299b7;
-  font-weight: 700;
-  letter-spacing: .12em;
 }
 
 /* 手機版 */
@@ -861,26 +873,88 @@ mark {
 }
 
 @media (max-width: 680px) {
-  .app { padding: 17px 13px 28px; }
-  .topbar { margin-bottom: 32px; }
-  .brand-logo { width: 41px; height: 41px; border-radius: 12px; }
-  .brand-name { font-size: 13px; }
-  .brand-sub { font-size: 9px; }
-  .status { padding: 7px 9px; font-size: 10px; }
-  .hero h1 { font-size: clamp(31px, 8vw, 43px); }
-  .hero-description { font-size: 12px; }
-  .search-box { min-height: 55px; padding-left: 13px; gap: 9px; }
+  .app { padding: 15px 13px 28px; }
+
+  .hero { margin-bottom: 18px; }
+
+  .hero-card {
+    padding: 21px 17px 17px;
+    border-radius: 20px;
+  }
+
+  .hero-topline {
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 27px;
+  }
+
+  .hero-kicker {
+    gap: 7px;
+    padding-top: 9px;
+    font-size: 9px;
+    letter-spacing: .13em;
+  }
+
+  .hero-kicker::before { width: 15px; }
+
+  .top-actions { gap: 6px; }
+
+  .status {
+    gap: 6px;
+    padding: 7px 8px;
+    font-size: 10px;
+  }
+
+  .top-actions .icon-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .hero h1 { font-size: clamp(29px, 8vw, 39px); }
+
+  .hero-description {
+    margin-top: 10px;
+    font-size: 12px;
+  }
+
+  .search-wrap { margin-top: 20px; }
+
+  .search-box {
+    min-height: 53px;
+    padding-left: 13px;
+    gap: 9px;
+    border-radius: 12px;
+  }
+
   .search-box input { font-size: 12px; }
   .search-shortcut { display: none; }
-  .workspace { grid-template-columns: minmax(0, 1fr); margin-top: 19px; gap: 14px; }
-  .tree-content { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
+
+  .workspace {
+    grid-template-columns: minmax(0, 1fr);
+    margin-top: 0;
+    gap: 14px;
+  }
+
+  .tree-content {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px;
+  }
+
   .tree-root-label { grid-column: 1 / -1; }
   .tree-item { padding: 8px 7px; gap: 6px; }
   .item-symbol { width: 25px; height: 25px; font-size: 17px; }
   .item-name { font-size: 11px; }
   .item-chevron { font-size: 12px; }
+
   .panel-header { min-height: 55px; padding: 12px 14px; }
-  .content-header { flex-direction: column; gap: 13px; padding: 16px; }
+
+  .content-header {
+    flex-direction: column;
+    gap: 13px;
+    padding: 16px;
+  }
+
   .content-title { font-size: 17px; }
   .content-actions { width: 100%; }
   .action-btn { flex: 1; }
@@ -893,7 +967,14 @@ mark {
   .code-container pre { font-size: 11px; }
   .code-container code { padding: 0 14px; }
   .text-view { padding: 17px; }
-  .footer { margin-top: 17px; }
+  .footer { margin-top: 13px; }
+}
+
+@media (max-width: 380px) {
+  .hero-card { padding: 18px 13px 15px; }
+  .hero-kicker { font-size: 8px; letter-spacing: .1em; }
+  .status { padding: 6px; }
+  .hero h1 { font-size: 28px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -912,41 +993,47 @@ mark {
 <div class="ambient two"></div>
 
 <div class="app">
-  <header class="topbar">
-    <div class="brand">
-      <div class="brand-logo">&gt;_</div>
-      <div>
-        <p class="brand-name">BASH COURSE</p>
-        <p class="brand-sub">PERSONAL LEARNING ARCHIVE</p>
-      </div>
-    </div>
-    <div class="top-actions">
-      <div class="status" id="connectionStatus">
-        <span class="status-dot"></span>
-        <span id="statusText">連線中</span>
-      </div>
-      <button class="icon-btn" id="reloadBtn" title="重新載入資料" aria-label="重新載入資料">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20 7v5h-5M4 17v-5h5"/>
-          <path d="M5.5 9a7 7 0 0 1 12-2L20 12M4 12l2.5 5a7 7 0 0 0 12-2"/>
-        </svg>
-      </button>
-    </div>
-  </header>
 
   <section class="hero">
-    <div class="eyebrow">LEARN · BUILD · REPEAT</div>
-    <h1>計算機實務應用<br><span class="gradient-text">Learning Bash</span></h1>
-    <p class="hero-description">課程作業、程式碼都有備份在這裡。</p>
+    <div class="hero-card">
+      <div class="hero-topline">
+        <div class="hero-kicker">LEARN · BUILD · REPEAT</div>
 
-    <div class="search-wrap">
-      <div class="search-box">
-        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path>
-        </svg>
-        <input id="searchInput" type="search" autocomplete="off" placeholder="搜尋檔案、程式碼、關鍵字……" aria-label="搜尋所有課程資料">
-        <span class="search-shortcut">/</span>
-        <button id="clearSearch" class="search-clear" aria-label="清除搜尋" title="清除搜尋">✕</button>
+        <div class="top-actions">
+          <div class="status" id="connectionStatus">
+            <span class="status-dot"></span>
+            <span id="statusText">連線中</span>
+          </div>
+
+          <button class="icon-btn" id="reloadBtn" title="重新載入資料" aria-label="重新載入資料">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 7v5h-5M4 17v-5h5"/>
+              <path d="M5.5 9a7 7 0 0 1 12-2L20 12M4 12l2.5 5a7 7 0 0 0 12-2"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <h1>
+        計算機實務應用<br>
+        <span class="gradient-text">Learning Bash</span>
+      </h1>
+
+      <p class="hero-description">課程作業、程式碼都有備份在這裡。</p>
+
+      <div class="search-wrap">
+        <div class="search-box">
+          <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="m20 20-4-4"></path>
+          </svg>
+
+          <input id="searchInput" type="search" autocomplete="off" placeholder="搜尋檔案、程式碼、關鍵字……" aria-label="搜尋所有課程資料">
+
+          <span class="search-shortcut">/</span>
+
+          <button id="clearSearch" class="search-clear" aria-label="清除搜尋" title="清除搜尋">✕</button>
+        </div>
       </div>
     </div>
   </section>
@@ -958,8 +1045,10 @@ mark {
           <span class="heading-icon">⌘</span>
           課程資料夾
         </div>
+
         <button class="icon-btn" id="rootBtn" title="返回根目錄" aria-label="返回根目錄">⌂</button>
       </div>
+
       <div class="tree-content" id="folderTree">
         <div class="loading-line"><span class="spinner"></span>正在讀取資料夾……</div>
       </div>
@@ -973,7 +1062,9 @@ mark {
           <div class="content-subtitle">選擇資料夾，開始瀏覽學習內容。</div>
         </div>
       </div>
+
       <div id="breadcrumbs" class="breadcrumbs"></div>
+
       <div id="mainContent">
         <div class="empty-state">
           <div class="empty-symbol">⌘</div>
@@ -985,7 +1076,6 @@ mark {
   </main>
 
   <footer class="footer">
-    <span class="footer-brand">BASH COURSE</span>
     <span>Powered by GitHub Pages</span>
   </footer>
 </div>
