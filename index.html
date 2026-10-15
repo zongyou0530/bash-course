@@ -8,7 +8,7 @@
   <!-- 設定行動裝置瀏覽器工具列的主題色彩 -->
   <meta name="theme-color" content="#080a14">
   <!-- 設定網頁的 Favicon 圖示 -->
-  <link rel="icon" type="image/png" href="./favicon.png.png">
+  <link rel="icon" type="image/png" href="./favicon.png.png"> 
   <!-- iPhone / iPad 加入主畫面時使用的圖示 -->
   <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
   <!-- 網頁標題 -->
@@ -917,9 +917,10 @@ const HIDDEN_ROOT_FILES = new Set([
         <div class="file-list">
           ${items.map((item, index) => {
             const isFolder = item.type === "tree";
-            const meta = isFolder
-              ? "資料夾 · 點擊開啟"
-              : `${getExtension(item.path).toUpperCase() \vert{}\vert{} "FILE"} 檔案${item.size ? " · " + formatSize(item.size) : ""}`;
+            // 判斷目前項目是資料夾還是檔案，並產生對應的說明文字
+const meta = isFolder
+  ? "資料夾 · 點擊開啟"
+  : `${getExtension(item.path).toUpperCase() || "FILE"} 檔案${item.size ? " · " + formatSize(item.size) : ""}`;
 
             return `
               <button class="file-row"
