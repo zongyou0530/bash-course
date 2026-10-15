@@ -574,12 +574,16 @@
      * 定義要在網站課程檔案列表中隱藏的根目錄檔案。
      * 這些檔案（如網站主程式、說明檔、圖示）仍保留在 GitHub 中，但不在前端介面列出。
      */
-    const HIDDEN_ROOT_FILES = new Set([
-      "index.html",       
-      "README.md",        
-      "favicon.png.png"   
-      "apple-touch-icon.png.png"
-    ]);
+   /*
+ * 不在網站課程檔案列表中顯示的根目錄檔案。
+ * 這些檔案仍保留在 GitHub，不會被刪除。
+ */
+const HIDDEN_ROOT_FILES = new Set([
+  "index.html",               // 網站主程式
+  "README.md",                // GitHub 專案說明文件
+  "favicon.png.png",          // 一般網站圖示
+  "apple-touch-icon.png.png"  // iPhone 主畫面圖示（請確認實際檔名）
+]);
 
     /* HTML 特殊字元跳脫函式，防止 XSS 攻擊 */
     function escapeHTML(value) {
