@@ -1217,7 +1217,17 @@
     let toastTimer = null;
 
     const contentCache = new Map();
-    const HIDDEN_ROOT_FILES = new Set(["index.html", "README.md"]);
+    
+/*
+ * 不在網站課程檔案列表顯示的根目錄檔案。
+ * 這些檔案仍然保留在 GitHub，不會被刪除。
+ */
+const HIDDEN_ROOT_FILES = new Set([
+  "index.html",       // 網站主程式
+  "README.md",        // GitHub 專案說明文件
+  "favicon.png.png"   // 網站圖示
+]);
+
 
     function escapeHTML(value) {
       return String(value).replace(/[&<>"']/g, char => ({
