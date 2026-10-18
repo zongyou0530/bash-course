@@ -1,0 +1,3 @@
+USE BASE SHELL AND PYTHON TO WRITE A 9X9 MULTIPLICATION TABLE.
+
+「請使用bash Shell（命令列腳本）與 Python 編寫一個 9x9 乘法表。」
