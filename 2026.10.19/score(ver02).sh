@@ -1,3 +1,5 @@
+read -p "請輸入成績" score
+
 if test  $a -ge 90
 then
 echo "a"
