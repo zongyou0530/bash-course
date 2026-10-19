@@ -1,4 +1,4 @@
-read -p "請輸入成績" score
+read -p "請輸入成績" a
 
 if test  $a -ge 90
 then
