@@ -1596,6 +1596,69 @@
         background-color: rgba(7, 17, 35, .88);
       }
     }
+
+    /* Liquid Glass 修正：消除斜向三角裝飾與重疊邊框 */
+    .hero::after,
+    .panel::before {
+      content: none !important;
+      display: none !important;
+      background: none !important;
+    }
+
+    .hero,
+    .panel,
+    .code-view,
+    .result-card {
+      outline: none !important;
+      border-style: solid;
+      border-width: 1px;
+      border-color: rgba(178, 211, 250, .24);
+      box-shadow:
+        0 18px 54px rgba(0, 5, 18, .24),
+        inset 0 1px 0 rgba(255, 255, 255, .13) !important;
+    }
+
+    body.webgl-glass-ready .hero,
+    body.webgl-glass-ready .panel {
+      border-color: rgba(178, 211, 250, .24) !important;
+      box-shadow:
+        0 18px 54px rgba(0, 5, 18, .24),
+        inset 0 1px 0 rgba(255, 255, 255, .13) !important;
+    }
+
+    /* 課程日期資料夾：透明玻璃膠囊 */
+    .tree-item {
+      border: 1px solid rgba(169, 205, 248, .10) !important;
+      border-radius: 999px !important;
+      background: rgba(255, 255, 255, .018) !important;
+      box-shadow: none !important;
+      transition:
+        background .22s ease,
+        border-color .22s ease,
+        box-shadow .22s ease,
+        color .22s ease !important;
+    }
+
+    .tree-item:hover {
+      border-color: rgba(174, 211, 255, .26) !important;
+      background: rgba(164, 202, 250, .075) !important;
+    }
+
+    .tree-item.active {
+      border-color: rgba(177, 213, 255, .34) !important;
+      border-left-color: rgba(177, 213, 255, .34) !important;
+      border-radius: 999px !important;
+      background:
+        linear-gradient(110deg, rgba(190, 220, 255, .105), rgba(120, 170, 235, .045)) !important;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .16),
+        0 5px 18px rgba(0, 8, 25, .10) !important;
+    }
+
+    .tree-item .item-symbol {
+      filter: drop-shadow(0 1px 5px rgba(0, 0, 0, .18));
+    }
+
   </style>
 </head>
 
