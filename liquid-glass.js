@@ -218,34 +218,46 @@
       const dpr = resizeCanvas();
       if (dirty) collectSurfaces();
 
-      const rectData = new Float32Array(MAX_SURFACES * 4);
-      const radii = new Float32Array(MAX_SURFACES);
-      let count = 0;
-      for (const element of surfaces) {
-        const rect = element.getBoundingClientRect();
-        if (rect.width <= 2 || rect.height <= 2) continue;
-        const radius = parseFloat(getComputedStyle(element).borderTopLeftRadius) || 16;
-        rectData[count * 4] = rect.left * dpr;
-        rectData[count * 4 + 1] = (window.innerHeight - rect.bottom) * dpr;
-        rectData[count * 4 + 2] = rect.width * dpr;
-        rectData[count * 4 + 3] = rect.height * dpr;
-        radii[count] = radius * dpr;
-        count++;
-        if (count >= MAX_SURFACES) break;
-      }
-
+      gl.disable(gl.SCISSOR_TEST);
       gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.useProgram(program);
       gl.bindVertexArray(vao);
       gl.uniform2f(locations.resolution, canvas.width, canvas.height);
       gl.uniform1f(locations.time, (now - startTime) / 1000);
-      gl.uniform1i(locations.count, count);
-      gl.uniform4fv(locations.rects, rectData);
-      gl.uniform1fv(locations.radii, radii);
       gl.enable(gl.BLEND);
       gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-      gl.drawArrays(gl.TRIANGLES, 0, 3);
+      gl.enable(gl.SCISSOR_TEST);
+
+      const rectData = new Float32Array(MAX_SURFACES * 4);
+      const radii = new Float32Array(MAX_SURFACES);
+      for (const element of surfaces) {
+        const rect = element.getBoundingClientRect();
+        if (rect.width <= 2 || rect.height <= 2) continue;
+
+        const x = Math.max(0, Math.floor(rect.left * dpr));
+        const y = Math.max(0, Math.floor((window.innerHeight - rect.bottom) * dpr));
+        const width = Math.min(canvas.width - x, Math.ceil(rect.width * dpr));
+        const height = Math.min(canvas.height - y, Math.ceil(rect.height * dpr));
+        if (width <= 0 || height <= 0) continue;
+
+        const radius = parseFloat(getComputedStyle(element).borderTopLeftRadius) || 16;
+        rectData.fill(0);
+        radii.fill(0);
+        rectData[0] = rect.left * dpr;
+        rectData[1] = (window.innerHeight - rect.bottom) * dpr;
+        rectData[2] = rect.width * dpr;
+        rectData[3] = rect.height * dpr;
+        radii[0] = radius * dpr;
+
+        gl.scissor(x, y, width, height);
+        gl.uniform1i(locations.count, 1);
+        gl.uniform4fv(locations.rects, rectData);
+        gl.uniform1fv(locations.radii, radii);
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+      }
+
+      gl.disable(gl.SCISSOR_TEST);
       gl.disable(gl.BLEND);
       dirty = false;
       if (!reducedMotion) frame = requestAnimationFrame(draw);
