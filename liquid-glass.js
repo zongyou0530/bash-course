@@ -4,14 +4,14 @@
   const SELECTORS = [".hero", ".panel", ".search-box"];
   const DPR_CAP = 1.75;
 
-  const vertexSource = \`#version 300 es
+  const vertexSource = `#version 300 es
   precision highp float;
   const vec2 POSITIONS[3] = vec2[3](
     vec2(-1.0, -1.0), vec2(3.0, -1.0), vec2(-1.0, 3.0)
   );
-  void main() { gl_Position = vec4(POSITIONS[gl_VertexID], 0.0, 1.0); }\`;
+  void main() { gl_Position = vec4(POSITIONS[gl_VertexID], 0.0, 1.0); }`;
 
-  const fragmentSource = \`#version 300 es
+  const fragmentSource = `#version 300 es
   precision highp float;
   out vec4 outColor;
   uniform vec2 u_resolution;
@@ -85,7 +85,7 @@
       }
     }
     outColor = result;
-  }\`;
+  }`;
 
   function compile(gl, type, source) {
     const shader = gl.createShader(type);
