@@ -54,7 +54,7 @@
         linear-gradient(rgba(116, 183, 216, .075) 1px, transparent 1px),
         linear-gradient(90deg, rgba(116, 183, 216, .075) 1px, transparent 1px),
         radial-gradient(ellipse at 12% 0%, rgba(46, 130, 181, .22), transparent 42%),
-        radial-gradient(ellipse at 88% 15%, rgba(42, 159, 177, .15), transparent 38%),
+        radial-gradient(ellipse at 88% 15%, rgba(45, 105, 190, .16), transparent 38%),
         linear-gradient(145deg, #071522 0%, #0a1e30 48%, #081a29 100%);
       background-size: 30px 30px, 72px 72px, 72px 72px, auto, auto, auto;
       color: var(--text);
@@ -116,7 +116,7 @@
     }
 
     .ambient.two {
-      background: #278eae;
+      background: #426fd0;
       top: 65%;
       right: -240px;
       animation-delay: -10s;
@@ -1406,17 +1406,29 @@
     }
 
 
-    /* 藍綠偏藍的玻璃質感輔助光層 */
+    /* 深藍色 Liquid Glass：低底色、不遮擋背景，靠背板模糊與邊緣反光呈現玻璃 */
+    body {
+      background-color: #050d1c;
+      background-image:
+        radial-gradient(circle, rgba(164, 211, 255, .22) 1px, transparent 1.7px),
+        linear-gradient(rgba(116, 169, 220, .065) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(116, 169, 220, .065) 1px, transparent 1px),
+        radial-gradient(ellipse at 14% 3%, rgba(35, 105, 190, .28), transparent 43%),
+        radial-gradient(ellipse at 88% 76%, rgba(35, 91, 175, .20), transparent 42%),
+        linear-gradient(145deg, #050d1c 0%, #091a32 48%, #071326 100%);
+      background-size: 30px 30px, 72px 72px, 72px 72px, auto, auto, auto;
+    }
+
     body::before {
       content: "";
       position: fixed;
       inset: 0;
       z-index: 0;
       pointer-events: none;
-      opacity: .58;
+      opacity: .7;
       background:
-        radial-gradient(ellipse at 18% 18%, rgba(74, 151, 205, .13), transparent 42%),
-        radial-gradient(ellipse at 82% 72%, rgba(64, 175, 190, .10), transparent 44%);
+        radial-gradient(ellipse at 18% 18%, rgba(69, 139, 226, .14), transparent 42%),
+        radial-gradient(ellipse at 82% 72%, rgba(62, 119, 210, .12), transparent 44%);
     }
 
     .app {
@@ -1424,68 +1436,166 @@
       z-index: 1;
     }
 
-    .ambient.one {
-      background: #368fba;
+    :root {
+      --bg: #050d1c;
+      --panel: rgba(8, 20, 40, .22);
+      --panel-solid: #0a1930;
+      --border: rgba(164, 202, 245, .19);
+      --border-hover: rgba(125, 180, 245, .55);
+      --text: #edf5ff;
+      --muted: #9fb4d0;
+      --purple: #91baff;
+      --blue: #6faeff;
+      --cyan: #a8d8ff;
+      --green: #a8caff;
+      --shadow: 0 22px 65px rgba(0, 5, 18, .30);
+    }
+
+    .ambient {
+      filter: blur(112px);
       opacity: .16;
     }
-
+    .ambient.one {
+      background: #347fe0;
+      opacity: .22;
+    }
     .ambient.two {
-      background: #318dbb;
-      opacity: .15;
+      background: #526fe0;
+      opacity: .17;
     }
 
+    /* 主視覺：透明深藍玻璃，不再使用不透明彩色漸層 */
     .hero {
-      border-color: rgba(143, 237, 218, .25);
+      border: 1px solid rgba(190, 218, 255, .25);
       background:
-        radial-gradient(ellipse at 88% 0%, rgba(82, 174, 220, .20), transparent 40%),
-        radial-gradient(ellipse at 5% 100%, rgba(55, 153, 190, .20), transparent 48%),
-        linear-gradient(125deg, rgba(12, 66, 68, .78), rgba(12, 52, 60, .76) 52%, rgba(10, 55, 66, .80));
-      box-shadow: 0 24px 75px rgba(0, 0, 0, .28), inset 0 1px 1px rgba(232, 255, 250, .16), inset 0 0 36px rgba(97, 222, 203, .055);
+        linear-gradient(118deg, rgba(255,255,255,.075), transparent 34%, rgba(103,157,232,.035) 72%, rgba(255,255,255,.045)),
+        rgba(7, 20, 43, .24);
+      box-shadow:
+        0 26px 80px rgba(0, 5, 20, .32),
+        inset 0 1px 0 rgba(255,255,255,.34),
+        inset 0 -1px 0 rgba(255,255,255,.07),
+        inset 1px 0 0 rgba(255,255,255,.10),
+        inset -1px 0 0 rgba(255,255,255,.06);
+      backdrop-filter: blur(28px) saturate(185%);
+      -webkit-backdrop-filter: blur(28px) saturate(185%);
+    }
+    .hero::after {
+      background:
+        linear-gradient(112deg, rgba(255,255,255,.12), transparent 23%, transparent 68%, rgba(160,198,255,.075));
+      border-color: rgba(220,235,255,.10);
     }
 
+    /* 主要面板：底色透明度約 20%，讓網格和光暈確實透出 */
     .panel {
-      border-color: rgba(144, 226, 215, .19);
-      background: linear-gradient(145deg, rgba(16, 49, 53, .70), rgba(8, 29, 35, .66));
-      box-shadow: 0 20px 65px rgba(0, 0, 0, .27), inset 0 1px 0 rgba(230, 255, 250, .10);
+      position: relative;
+      isolation: isolate;
+      border: 1px solid rgba(174, 207, 248, .22);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.075), rgba(255,255,255,.012) 42%, rgba(110,155,225,.035)),
+        rgba(6, 17, 36, .20);
+      box-shadow:
+        0 24px 72px rgba(0, 5, 18, .30),
+        inset 0 1px 0 rgba(255,255,255,.24),
+        inset 0 -1px 0 rgba(255,255,255,.045),
+        inset 1px 0 0 rgba(255,255,255,.075);
+      backdrop-filter: blur(26px) saturate(185%);
+      -webkit-backdrop-filter: blur(26px) saturate(185%);
+    }
+    .panel::before {
+      background:
+        radial-gradient(ellipse at 0% 0%, rgba(255,255,255,.10), transparent 42%),
+        linear-gradient(135deg, rgba(255,255,255,.045), transparent 38%, transparent 72%, rgba(135,180,255,.045));
     }
 
+    /* 搜尋欄與小型控制：薄玻璃 */
     .search-box,
     .status,
     .icon-btn,
-    .action-btn,
-    .tree-item.active,
-    .file-row:hover,
-    .result-card {
-      backdrop-filter: blur(18px) saturate(145%);
-      -webkit-backdrop-filter: blur(18px) saturate(145%);
+    .action-btn {
+      border-color: rgba(181, 211, 250, .22);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.10), rgba(255,255,255,.018)),
+        rgba(7, 19, 40, .24);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.20),
+        inset 0 -1px 0 rgba(255,255,255,.035),
+        0 8px 24px rgba(0,5,18,.14);
+      backdrop-filter: blur(22px) saturate(180%);
+      -webkit-backdrop-filter: blur(22px) saturate(180%);
+    }
+    .search-box:focus-within {
+      border-color: rgba(145, 194, 255, .68);
+      background: rgba(10, 28, 56, .30);
+      box-shadow: 0 0 0 4px rgba(75, 139, 230, .12), 0 12px 32px rgba(0,8,25,.18), inset 0 1px 0 rgba(255,255,255,.24);
     }
 
     .tree-item.active {
-      border-color: rgba(112, 190, 224, .27);
-      background: linear-gradient(110deg, rgba(55, 153, 190, .17), rgba(53, 157, 190, .10));
-      color: #dcfff5;
-      box-shadow: inset 0 1px 0 rgba(226, 255, 248, .08), 0 5px 20px rgba(12, 125, 116, .08);
-    }
-
-    .search-box:focus-within {
-      border-color: rgba(119, 232, 211, .65);
-      box-shadow: 0 0 0 4px rgba(55, 153, 190, .10), 0 8px 28px rgba(55, 153, 190, .08);
+      border-color: rgba(145, 190, 248, .30);
+      background:
+        linear-gradient(115deg, rgba(255,255,255,.10), rgba(255,255,255,.025)),
+        rgba(56, 112, 196, .12);
+      color: #e7f2ff;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.16), 0 5px 18px rgba(0,8,25,.12);
+      backdrop-filter: blur(18px) saturate(175%);
+      -webkit-backdrop-filter: blur(18px) saturate(175%);
     }
 
     .heading-icon {
-      border-color: rgba(112, 190, 224, .24);
-      background: rgba(55, 153, 190, .12);
+      border-color: rgba(133, 183, 245, .27);
+      color: #a9ceff;
+      background: rgba(65, 122, 205, .13);
     }
-
     .content-header {
-      background: linear-gradient(110deg, rgba(55, 153, 190, .07), rgba(53, 157, 190, .025) 55%, transparent 80%);
+      background: linear-gradient(110deg, rgba(65, 123, 207, .075), rgba(65, 123, 207, .02) 55%, transparent 80%);
     }
+    .content-kicker,
+    .eyebrow,
+    .icon-btn,
+    .code-footer button {
+      color: #b8d5ff;
+    }
+    .gradient-text {
+      background: linear-gradient(105deg, #e2efff 4%, #9bc5ff 52%, #b9e4ff 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .status { color: #dbeaff; }
 
     .code-view {
-      border-color: rgba(135, 218, 208, .16);
-      box-shadow: inset 0 1px 0 rgba(235, 255, 250, .035);
+      border-color: rgba(151, 190, 244, .19);
+      background:
+        linear-gradient(140deg, rgba(255,255,255,.045), transparent 40%),
+        rgba(4, 10, 22, .58);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.13), 0 14px 40px rgba(0,0,0,.20);
+      backdrop-filter: blur(18px) saturate(150%);
+      -webkit-backdrop-filter: blur(18px) saturate(150%);
     }
 
+    .result-card {
+      border-color: rgba(160, 195, 242, .16);
+      background: linear-gradient(135deg, rgba(255,255,255,.06), transparent 65%), rgba(255,255,255,.018);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+      backdrop-filter: blur(20px) saturate(175%);
+      -webkit-backdrop-filter: blur(20px) saturate(175%);
+    }
+    .file-row:hover,
+    .result-card:hover {
+      border-color: rgba(165, 202, 250, .26);
+      background: linear-gradient(135deg, rgba(255,255,255,.09), rgba(255,255,255,.025)), rgba(55, 112, 195, .045);
+    }
+
+    .tree-item.active::before,
+    .tree-item.active::after {
+      content: none !important;
+      display: none !important;
+    }
+
+    @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+      .hero, .panel, .search-box, .status, .icon-btn, .action-btn, .tree-item, .code-view, .result-card, .toast {
+        background-color: rgba(7, 17, 35, .88);
+      }
+    }
   </style>
 </head>
 
