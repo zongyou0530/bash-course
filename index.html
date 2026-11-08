@@ -2078,6 +2078,183 @@
       border-radius: 14px !important;
     }
 
+
+    /* === Layout breathing room + clean Liquid Glass surfaces === */
+
+    /* Remove diagonal/triangle artwork from card surfaces entirely. */
+    .hero,
+    .panel,
+    .content-panel {
+      background-image: none !important;
+    }
+
+    .hero::before,
+    .hero::after,
+    .panel::before,
+    .panel::after,
+    .content-panel::before,
+    .content-panel::after {
+      content: none !important;
+      display: none !important;
+      background: none !important;
+      clip-path: none !important;
+      mask: none !important;
+      -webkit-mask: none !important;
+    }
+
+    /* True translucent surfaces: no opaque gradient overlays. */
+    .hero,
+    body.webgl-glass-ready .hero {
+      background-color: rgba(10, 27, 48, .16) !important;
+      border: 1px solid rgba(190, 218, 250, .24) !important;
+      box-shadow:
+        0 18px 48px rgba(0, 6, 20, .20),
+        inset 0 1px 0 rgba(255,255,255,.12) !important;
+      backdrop-filter: blur(30px) saturate(170%) !important;
+      -webkit-backdrop-filter: blur(30px) saturate(170%) !important;
+    }
+
+    .panel,
+    body.webgl-glass-ready .panel {
+      background-color: rgba(8, 23, 42, .14) !important;
+      border: 1px solid rgba(177, 209, 245, .19) !important;
+      box-shadow:
+        0 15px 42px rgba(0, 6, 20, .17),
+        inset 0 1px 0 rgba(255,255,255,.075) !important;
+      backdrop-filter: blur(28px) saturate(170%) !important;
+      -webkit-backdrop-filter: blur(28px) saturate(170%) !important;
+    }
+
+    /* Add breathing room around the overall layout. */
+    .app {
+      padding: 34px 40px 30px !important;
+    }
+
+    .hero {
+      padding: 32px 36px 34px !important;
+      margin-bottom: 28px !important;
+    }
+
+    .workspace {
+      gap: 26px !important;
+      grid-template-columns: 310px minmax(0, 1fr) !important;
+    }
+
+    .panel-header {
+      min-height: 68px !important;
+      padding: 15px 18px !important;
+    }
+
+    /* Root/home control: icon-only, comfortably sized, no cramped text. */
+    #rootBtn {
+      width: 46px !important;
+      height: 46px !important;
+      min-width: 46px !important;
+      padding: 0 !important;
+      border-radius: 50% !important;
+      flex: 0 0 46px !important;
+    }
+
+    #rootBtn svg {
+      width: 19px !important;
+      height: 19px !important;
+    }
+
+    /* Date folders: visibly translucent, taller, with clear vertical rhythm. */
+    .tree-content {
+      padding: 17px 15px 20px !important;
+    }
+
+    .tree-item {
+      min-height: 52px !important;
+      padding: 13px 16px !important;
+      margin-bottom: 14px !important;
+      gap: 13px !important;
+      border-radius: 999px !important;
+      border: 1px solid rgba(190, 220, 255, .12) !important;
+      background-color: rgba(135, 181, 231, .035) !important;
+      background-image: none !important;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.055) !important;
+      backdrop-filter: blur(22px) saturate(165%) !important;
+      -webkit-backdrop-filter: blur(22px) saturate(165%) !important;
+    }
+
+    .tree-item:hover {
+      background-color: rgba(145, 192, 242, .085) !important;
+    }
+
+    .tree-item.active {
+      background-color: rgba(93, 151, 213, .13) !important;
+      border-color: rgba(190, 220, 255, .25) !important;
+    }
+
+    .item-name {
+      font-size: 13px !important;
+      letter-spacing: .01em;
+    }
+
+    /* Folder contents: more separation between every file row. */
+    .file-list {
+      padding: 20px 22px 24px !important;
+    }
+
+    .file-row {
+      min-height: 64px !important;
+      gap: 15px !important;
+      margin-bottom: 11px !important;
+      padding: 16px 18px !important;
+      border-radius: 15px !important;
+      background-color: rgba(120, 163, 213, .025) !important;
+      border-color: rgba(180, 211, 247, .07) !important;
+    }
+
+    .file-row:hover {
+      background-color: rgba(145, 190, 240, .075) !important;
+      border-color: rgba(190, 220, 255, .18) !important;
+    }
+
+    .file-info {
+      gap: 6px !important;
+    }
+
+    .file-name {
+      font-size: 14px !important;
+      line-height: 1.55 !important;
+    }
+
+    .file-meta {
+      font-size: 11px !important;
+      line-height: 1.5 !important;
+    }
+
+    .content-header {
+      min-height: 124px !important;
+      padding: 26px 28px !important;
+    }
+
+    .breadcrumbs {
+      padding: 14px 22px !important;
+    }
+
+    /* Keep mobile spacing generous without forcing desktop dimensions. */
+    @media (max-width: 1050px) {
+      .app { padding: 26px 24px 22px !important; }
+      .workspace { grid-template-columns: 270px minmax(0, 1fr) !important; gap: 20px !important; }
+    }
+
+    @media (max-width: 760px) {
+      .app { padding: 18px 14px 18px !important; }
+      .hero { padding: 24px 20px 26px !important; margin-bottom: 20px !important; }
+      .workspace { grid-template-columns: minmax(0, 1fr) !important; gap: 18px !important; }
+      .panel-header { min-height: 62px !important; padding: 12px 15px !important; }
+      .tree-content { padding: 13px 12px 16px !important; }
+      .tree-item { min-height: 48px !important; margin-bottom: 11px !important; padding: 11px 14px !important; }
+      .file-list { padding: 14px !important; }
+      .file-row { min-height: 60px !important; margin-bottom: 9px !important; padding: 14px !important; }
+      .content-header { padding: 20px 18px !important; }
+      .breadcrumbs { padding: 12px 16px !important; }
+    }
+
   </style>
 </head>
 
