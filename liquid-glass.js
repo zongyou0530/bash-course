@@ -40,14 +40,14 @@
     vec2 grid = min(gridPhase, 1.0 - gridPhase);
     float gridLine = 1.0 - smoothstep(0.0, 0.018, min(grid.x, grid.y));
     base += vec3(0.08, 0.19, 0.30) * gridLine * 0.30;
-    float vignette = 1.0 - smoothstep(0.12, 1.0, length((uv - 0.5) * vec2(0.9, 0.75)));
-    return base * (0.78 + vignette * 0.22);
+    return base;
   }
 
   void main() {
     vec2 pixel = gl_FragCoord.xy;
     vec2 uv = pixel / u_resolution;
     vec4 result = vec4(0.0);
+
     for (int i = 0; i < 8; i++) {
       if (i >= u_count) break;
       vec4 rect = u_rects[i];
@@ -55,35 +55,21 @@
       vec2 local = pixel - center;
       float radius = u_radii[i];
       float d = roundedBox(local, rect.zw * 0.5, radius);
+
       if (d <= 0.0) {
-        float eps = 1.25;
-        vec2 gradient = vec2(
-          roundedBox(local + vec2(eps, 0.0), rect.zw * 0.5, radius) -
-          roundedBox(local - vec2(eps, 0.0), rect.zw * 0.5, radius),
-          roundedBox(local + vec2(0.0, eps), rect.zw * 0.5, radius) -
-          roundedBox(local - vec2(0.0, eps), rect.zw * 0.5, radius)
-        );
-        vec2 normal = length(gradient) > 0.0001 ? normalize(gradient) : vec2(0.0, 1.0);
-        float edge = 1.0 - smoothstep(0.0, 17.0, -d);
-        float innerRim = exp(-max(0.0, -d) / 2.6);
-        float wave = sin(u_time * 0.32 + uv.x * 5.0 + uv.y * 3.0) * 0.00045;
-        float bend = 0.0035 + edge * 0.0085 + wave;
-        vec2 refractedUV = uv + normal * bend;
-        vec2 dispersion = normal * (0.0010 + edge * 0.0017);
-        vec3 refracted = vec3(
-          environment(refractedUV + dispersion).r,
-          environment(refractedUV).g,
-          environment(refractedUV - dispersion).b
-        );
-        float fresnel = pow(1.0 - max(0.0, abs(normal.y) * 0.62 + abs(normal.x) * 0.18), 3.0);
-        float reflection = 0.5 + 0.5 * sin(uv.x * 8.0 + uv.y * 3.5 + u_time * 0.18);
-        vec3 glass = refracted * 0.88;
-        glass += vec3(0.56, 0.76, 1.0) * (0.055 + edge * 0.12 + innerRim * 0.18);
-        glass += vec3(0.34, 0.57, 0.86) * fresnel * 0.10;
-        glass += vec3(0.62, 0.80, 1.0) * reflection * edge * 0.045;
-        result = vec4(glass, 0.94);
+        float insideDistance = max(0.0, -d);
+        float rim = 1.0 - smoothstep(0.0, 9.0, insideDistance);
+        float softRim = exp(-insideDistance / 22.0);
+        float wave = 0.5 + 0.5 * sin(uv.x * 5.0 + uv.y * 3.0 + u_time * 0.16);
+        vec2 direction = vec2(0.0007, 0.00035) * (0.5 + wave);
+        vec3 refracted = environment(uv + direction);
+        vec3 tint = mix(vec3(0.43, 0.63, 0.88), refracted, 0.20);
+        float alpha = 0.018 + rim * 0.095 + softRim * 0.012;
+        vec3 highlight = vec3(0.72, 0.84, 1.0) * (rim * (0.10 + wave * 0.035));
+        result = vec4(tint * 0.22 + highlight, alpha);
       }
     }
+
     outColor = result;
   }`;
 
@@ -158,16 +144,6 @@
       radii: gl.getUniformLocation(program, "u_radii[0]")
     };
 
-    const style = document.createElement("style");
-    style.id = "liquid-glass-webgl-styles";
-    style.textContent = [
-      "body.webgl-glass-ready .hero, body.webgl-glass-ready .panel { background: transparent !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }",
-      "body.webgl-glass-ready .search-box { background: transparent !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }",
-      "body.webgl-glass-ready .hero { border-color: rgba(190,220,255,.28); box-shadow: 0 24px 75px rgba(0,0,0,.26), inset 0 1px 0 rgba(255,255,255,.42); }",
-      "body.webgl-glass-ready .panel { border-color: rgba(170,207,247,.23); box-shadow: 0 20px 65px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.22); }",
-      "body.webgl-glass-ready .search-box { border-color: rgba(198,224,255,.30); box-shadow: inset 0 1px 0 rgba(255,255,255,.24); }"
-    ].join("\\n");
-    document.head.appendChild(style);
     document.body.classList.add("webgl-glass-ready");
 
     const surfaces = [];
