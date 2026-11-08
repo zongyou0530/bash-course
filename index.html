@@ -1797,6 +1797,114 @@
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, .11) !important;
     }
 
+
+    /* === 修正卡片兩側三角形：關閉卡片自身所有裝飾偽元素 === */
+    .hero::before,
+    .hero::after,
+    .panel::before,
+    .panel::after {
+      content: none !important;
+      display: none !important;
+      background: none !important;
+      border: 0 !important;
+      box-shadow: none !important;
+      clip-path: none !important;
+      mask: none !important;
+      -webkit-mask: none !important;
+    }
+
+    /* === 全站按鈕 Liquid Glass：保留透明度，以深淺與反光區分層級 === */
+    button {
+      position: relative;
+      isolation: isolate;
+      border: 1px solid rgba(190, 218, 250, .19) !important;
+      color: rgba(231, 242, 255, .94) !important;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.105), rgba(255,255,255,.018) 58%),
+        rgba(12, 27, 49, .22) !important;
+      -webkit-backdrop-filter: blur(18px) saturate(175%) !important;
+      backdrop-filter: blur(18px) saturate(175%) !important;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.17),
+        inset 0 -1px 0 rgba(255,255,255,.025),
+        0 5px 18px rgba(0, 5, 18, .12) !important;
+      transition:
+        background .22s ease,
+        border-color .22s ease,
+        box-shadow .22s ease,
+        color .22s ease,
+        transform .22s ease !important;
+    }
+
+    button:hover:not(:disabled) {
+      border-color: rgba(198, 226, 255, .34) !important;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.15), rgba(255,255,255,.035) 58%),
+        rgba(25, 52, 83, .30) !important;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.23),
+        0 7px 22px rgba(0, 7, 24, .17),
+        0 0 18px rgba(113, 174, 238, .075) !important;
+    }
+
+    button:active:not(:disabled) {
+      transform: scale(.985);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.075), rgba(255,255,255,.012)),
+        rgba(7, 19, 37, .34) !important;
+      box-shadow:
+        inset 0 1px 4px rgba(0, 0, 0, .18),
+        inset 0 1px 0 rgba(255,255,255,.10) !important;
+    }
+
+    button:disabled {
+      background: rgba(10, 22, 40, .14) !important;
+      border-color: rgba(180, 205, 235, .09) !important;
+      box-shadow: none !important;
+      opacity: .42;
+    }
+
+    /* 主操作按鈕只加深玻璃底色，不使用實心填色 */
+    .action-btn.primary,
+    #copyCodeBtn,
+    .retry-btn {
+      border-color: rgba(157, 204, 255, .29) !important;
+      color: #e5f2ff !important;
+      background:
+        linear-gradient(135deg, rgba(185, 216, 255, .13), rgba(255,255,255,.025)),
+        rgba(19, 43, 73, .30) !important;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.20),
+        0 6px 20px rgba(0, 6, 22, .16) !important;
+    }
+
+    .action-btn.primary:hover,
+    #copyCodeBtn:hover,
+    .retry-btn:hover {
+      background:
+        linear-gradient(135deg, rgba(196, 224, 255, .19), rgba(255,255,255,.045)),
+        rgba(28, 58, 94, .34) !important;
+    }
+
+    /* 資料夾保持膠囊形；未選取狀態更通透 */
+    .tree-item {
+      background: rgba(145, 187, 235, .018) !important;
+      border-color: rgba(180, 211, 247, .09) !important;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.045) !important;
+      -webkit-backdrop-filter: blur(16px) saturate(165%) !important;
+      backdrop-filter: blur(16px) saturate(165%) !important;
+    }
+
+    .tree-item:hover {
+      background: rgba(145, 187, 235, .055) !important;
+    }
+
+    .tree-item.active {
+      background:
+        linear-gradient(135deg, rgba(190, 220, 255, .095), rgba(255,255,255,.018)),
+        rgba(18, 39, 68, .19) !important;
+    }
+
   </style>
 </head>
 
