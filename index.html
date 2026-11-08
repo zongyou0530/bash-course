@@ -1659,6 +1659,78 @@
       filter: drop-shadow(0 1px 5px rgba(0, 0, 0, .18));
     }
 
+
+    /* === Liquid Glass 視覺校正（以 CSS 玻璃層為準）=== */
+    .hero::after,
+    .panel::before,
+    .tree-item::before,
+    .tree-item::after {
+      content: none !important;
+      display: none !important;
+      background: none !important;
+      border: 0 !important;
+      box-shadow: none !important;
+    }
+
+    .hero,
+    .panel,
+    .code-view,
+    .result-card {
+      border: 1px solid rgba(177, 211, 246, .22) !important;
+      outline: 0 !important;
+      box-shadow:
+        0 16px 48px rgba(0, 7, 20, .22),
+        inset 0 1px 0 rgba(255, 255, 255, .11) !important;
+      background-clip: padding-box !important;
+    }
+
+    .hero {
+      background:
+        radial-gradient(ellipse at 88% 0%, rgba(105, 177, 226, .13), transparent 42%),
+        linear-gradient(135deg, rgba(40, 83, 122, .40), rgba(17, 45, 72, .34) 55%, rgba(25, 61, 91, .38)) !important;
+      -webkit-backdrop-filter: blur(28px) saturate(165%) !important;
+      backdrop-filter: blur(28px) saturate(165%) !important;
+    }
+
+    .panel {
+      background:
+        linear-gradient(135deg, rgba(195, 224, 255, .055), rgba(120, 177, 225, .018) 55%),
+        rgba(14, 39, 63, .36) !important;
+      -webkit-backdrop-filter: blur(28px) saturate(165%) !important;
+      backdrop-filter: blur(28px) saturate(165%) !important;
+    }
+
+    .code-view,
+    .result-card {
+      background: rgba(8, 23, 40, .48) !important;
+      -webkit-backdrop-filter: blur(22px) saturate(155%) !important;
+      backdrop-filter: blur(22px) saturate(155%) !important;
+    }
+
+    /* 日期資料夾維持膠囊造型，改用真正半透明玻璃底 */
+    .tree-item {
+      border: 1px solid rgba(174, 210, 246, .12) !important;
+      border-radius: 999px !important;
+      background: rgba(154, 196, 235, .045) !important;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .045) !important;
+      -webkit-backdrop-filter: blur(16px) saturate(145%) !important;
+      backdrop-filter: blur(16px) saturate(145%) !important;
+    }
+
+    .tree-item:hover {
+      border-color: rgba(180, 216, 250, .27) !important;
+      background: rgba(154, 196, 235, .095) !important;
+    }
+
+    .tree-item.active {
+      border-color: rgba(185, 220, 252, .30) !important;
+      border-radius: 999px !important;
+      background: linear-gradient(110deg, rgba(170, 211, 249, .14), rgba(110, 169, 221, .075)) !important;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .13),
+        0 4px 16px rgba(0, 8, 24, .10) !important;
+    }
+
   </style>
 </head>
 
@@ -1750,7 +1822,6 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="./liquid-glass.js"></script>
 
   <script>
   (() => {
