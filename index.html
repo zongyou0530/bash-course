@@ -132,6 +132,8 @@
     }
 
     .app {
+      position: relative;
+      z-index: 1;
       width: min(1440px, 100%);
       margin: 0 auto;
       padding: 28px 34px 20px;
@@ -1404,7 +1406,7 @@
       content: "";
       position: fixed;
       inset: 0;
-      z-index: -1;
+      z-index: 0;
       pointer-events: none;
       opacity: .34;
       background-image:
