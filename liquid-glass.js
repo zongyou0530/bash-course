@@ -32,13 +32,15 @@
     float glowB = exp(-length((uv - vec2(0.88, 0.70)) * vec2(1.2, 1.0)) * 3.6);
     base += vec3(0.035, 0.12, 0.22) * glowA;
     base += vec3(0.025, 0.075, 0.19) * glowB;
-    vec2 dotGrid = abs(fract(px / 30.0) - 0.5);
-    float dots = 1.0 - smoothstep(0.035, 0.105, length(dotGrid));
+    vec2 dotPhase = fract(px / 30.0);
+    vec2 dotGrid = min(dotPhase, 1.0 - dotPhase);
+    float dots = 1.0 - smoothstep(0.025, 0.060, length(dotGrid));
     base += vec3(0.16, 0.28, 0.40) * dots * 0.42;
-    vec2 grid = abs(fract(px / 72.0) - 0.5);
-    float gridLine = 1.0 - smoothstep(0.485, 0.499, min(grid.x, grid.y));
+    vec2 gridPhase = fract(px / 72.0);
+    vec2 grid = min(gridPhase, 1.0 - gridPhase);
+    float gridLine = 1.0 - smoothstep(0.0, 0.018, min(grid.x, grid.y));
     base += vec3(0.08, 0.19, 0.30) * gridLine * 0.30;
-    float vignette = smoothstep(1.0, 0.12, length((uv - 0.5) * vec2(0.9, 0.75)));
+    float vignette = 1.0 - smoothstep(0.12, 1.0, length((uv - 0.5) * vec2(0.9, 0.75)));
     return base * (0.78 + vignette * 0.22);
   }
 
@@ -55,12 +57,13 @@
       float d = roundedBox(local, rect.zw * 0.5, radius);
       if (d <= 0.0) {
         float eps = 1.25;
-        vec2 normal = normalize(vec2(
+        vec2 gradient = vec2(
           roundedBox(local + vec2(eps, 0.0), rect.zw * 0.5, radius) -
           roundedBox(local - vec2(eps, 0.0), rect.zw * 0.5, radius),
           roundedBox(local + vec2(0.0, eps), rect.zw * 0.5, radius) -
           roundedBox(local - vec2(0.0, eps), rect.zw * 0.5, radius)
-        ));
+        );
+        vec2 normal = length(gradient) > 0.0001 ? normalize(gradient) : vec2(0.0, 1.0);
         float edge = 1.0 - smoothstep(0.0, 17.0, -d);
         float innerRim = exp(-max(0.0, -d) / 2.6);
         float wave = sin(u_time * 0.32 + uv.x * 5.0 + uv.y * 3.0) * 0.00045;
