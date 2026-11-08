@@ -2314,6 +2314,58 @@
       }
     }
 
+
+    /* Mobile code: keep the original font size; scroll inside the code box only. */
+    .code-container,
+    .text-view pre {
+      box-sizing: border-box !important;
+      display: block !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
+    }
+
+    .code-container pre,
+    .text-view pre {
+      box-sizing: border-box !important;
+      width: max-content !important;
+      min-width: 100% !important;
+      max-width: none !important;
+      margin: 0 !important;
+      font-size: 12px !important;
+      -webkit-text-size-adjust: 100% !important;
+      text-size-adjust: 100% !important;
+      white-space: pre !important;
+    }
+
+    .code-container pre code,
+    .text-view pre code {
+      font-size: 12px !important;
+      line-height: 1.8 !important;
+      -webkit-text-size-adjust: 100% !important;
+      text-size-adjust: 100% !important;
+      white-space: pre !important;
+    }
+
+    @media (max-width: 760px) {
+      .code-container,
+      .text-view pre {
+        max-width: 100% !important;
+        overflow-x: auto !important;
+      }
+
+      .code-container pre,
+      .text-view pre,
+      .code-container pre code,
+      .text-view pre code {
+        font-size: 12px !important;
+      }
+    }
+
   </style>
 </head>
 
