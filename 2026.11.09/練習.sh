@@ -6,3 +6,5 @@ echo -n "  $i x $n = $((i*n))"
 done
 echo
 done
+
+#56秒
