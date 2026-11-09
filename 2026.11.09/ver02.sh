@@ -10,4 +10,6 @@ do
                                                                                                                                                                          
   done                                                                                                                                                                   
                                                                                                                                                                          
-  echo    
+  echo                                                                                                                                                                   
+                                                                                                                                                                         
+done  
