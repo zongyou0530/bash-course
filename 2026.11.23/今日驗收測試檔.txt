@@ -1,0 +1,325 @@
+webminal login: yyyou                                                                                                             
+Password:                                                                                                                         
+Last login: Mon Nov 16 06:01:48 from localhost, 61.216.116.69                                                                     
+              ##############################################                                                                      
+              # webminal.org => your linux  ~ on the cloud #                                                                      
+              ##############################################                                                                      
+[yyyou@webminal ~]$ vi 1123.sh                                                                                                    
+[yyyou@webminal ~]$ bash 1123.sh                                                                                                  
+1123.sh: line 1: 3=請選擇功能 (輸入編號): : command not found                                                                              
+1) check file                                                                                                                     
+2) check department                                                                                                               
+3) show grade                                                                                                                     
+4) save result                                                                                                                    
+5) exit                                                                                                                           
+#?                                                                                                                                
+1) check file                                                                                                                     
+2) check department                                                                                                               
+3) show grade                                                                                                                     
+4) save result                                                                                                                    
+5) exit                                                                                                                           
+#?                                                                                                                                
+1) check file                                                                                                                     
+2) check department                                                                                                               
+3) show grade                                                                                                                     
+4) save result                                                                                                                    
+5) exit                                                                                                                           
+#? 5                                                                                                                              
+goodbye                                                                                                                           
+[yyyou@webminal ~]$ touch test.sh                                                                                                 
+[yyyou@webminal ~]$ bash 1123.sh                                                                                                  
+1123.sh: line 1: 3=請選擇功能 (輸入編號): : command not found                                                                              
+1) check file                                                                                                                     
+2) check department                                                                                                               
+3) show grade                                                                                                                     
+4) save result                                                                                                                    
+5) exit                                                                                                                           
+#? 1                                                                                                                              
+請輸入程式檔案名稱: test.sh                                                                                                                
+file ok                                                                                                                           
+1) check file                                                                                                                     
+2) check department                                                                                                               
+3) show grade                                                                                                                     
+4) save result                                                                                                                    
+5) exit                                                                                                                           
+#? 1                                                                                                                              
+請輸入程式檔案名稱: nothisfile.sh                                                                                                          
+file not found                                                                                                                    
+1) check file                                                                                                                     
+2) check department                                                                                                               
+3) show grade                                                                                                                     
+4) save result                                                                                                                    
+5) exit                                                                                                                           
+#? 2                                                                                                                              
+請輸入學生學號: e12345                                                                                                                   
+electrical engineering                                                                                                            
+1) check file                                                                                                                     
+2) check department                                                                                                               
+3) show grade                                                                                                                     
+4) save result                                                                                                                    
+5) exit                                                                                                                           
+#? 3                                                                                                                              
+請輸入數學成績 (0-100): 97                                                                                                               
+a+                                                                                                                                
+1) check file                                                                                                                     
+2) check department                                                                                                               
+3) show grade                                                                                                                     
+4) save result                                                                                                                    
+5) exit                                                                                                                           
+#? 3                                                                                                                              
+請輸入數學成績 (0-100): 101                                                                                                              
+invalid score                                                                                                                     
+1) check file                                                                                                                     
+2) check department                                                                                                               
+3) show grade                                                                                                                     
+4) save result                                                                                                                    
+5) exit                                                                                                                           
+#? 4                                                                                                                              
+請輸入學生學號: e1222                                                                                                                    
+請輸入數學成績: 67                                                                                                                       
+請輸入程式檔名: main.sh                                                                                                                  
+result saved                                                                                                                      
+1) check file                                                                                                                     
+2) check department                                                                                                               
+3) show grade                                                                                                                     
+4) save result                                                                                                                    
+5) exit                                                                                                                           
+#? cat result                                                                                                                     
+invalid selection                                                                                                                 
+1) check file                                                                                                                     
+2) check department                                                                                                               
+3) show grade                                                                                                                     
+4) save result                                                                                                                    
+5) exit                                                                                                                           
+#? 5                                                                                                                              
+goodbye                                                                                                                           
+[yyyou@webminal ~]$ cat result                                                                                                    
+e1222 67 main.sh                                                                                                                  
+[yyyou@webminal ~]$ 4                                                                                                             
+-bash: 4: command not found                                                                                                       
+[yyyou@webminal ~]$ bash 1123.sh                                                                                                  
+1123.sh: line 1: 3=請選擇功能 (輸入編號): : command not found                                                                              
+1) check file                                                                                                                     
+2) check department                                                                                                               
+3) show grade                                                                                                                     
+4) save result                                                                                                                    
+5) exit                                                                                                                           
+#? 4                                                                                                                              
+請輸入學生學號: c12345                                                                                                                   
+請輸入數學成績: 56                                                                                                                       
+請輸入程式檔名: cc.sh                                                                                                                    
+result saved                                                                                                                      
+1) check file                                                                                                                     
+2) check department                                                                                                               
+3) show grade                                                                                                                     
+4) save result                                                                                                                    
+5) exit                                                                                                                           
+#? 5                                                                                                                              
+goodbye                                                                                                                           
+[yyyou@webminal ~]$ cat result                                                                                                    
+e1222 67 main.sh                                                                                                                  
+c12345 56 cc.sh                                                                                                                   
+[yyyou@webminal ~]$ 9                                                                                                             
+-bash: 9: command not found                                                                                                       
+[yyyou@webminal ~]$cat 1123.sh                                                                                                    
+3="請選擇功能 (輸入編號): "                                                                                                                
+options=("check file" "check department" "show grade" "save result" "exit")                                                       
+                                                                                                                                  
+# ---------- check file ----------                                                                                                
+check_file() {                                                                                                                    
+    local fname                                                                                                                   
+    printf "請輸入程式檔案名稱: "                                                                                                          
+    read -r fname                                                                                                                 
+                                                                                                                                  
+    if [ ! -e "$fname" ]; then                                                                                                    
+        echo "file not found"                                                                                                     
+    elif [ ! -f "$fname" ]; then                                                                                                  
+        echo "not a regular file"                                                                                                 
+    elif [ ! -r "$fname" ]; then                                                                                                  
+        echo "not readable"                                                                                                       
+    else                                                                                                                          
+        echo "file ok"                                                                                                            
+    fi                                                                                                                            
+}                                                                                                                                 
+                                                                                                                                  
+# ---------- check department ----------                                                                                          
+check_department() {                                                                                                              
+    local sid                                                                                                                     
+    printf "請輸入學生學號: "                                                                                                            
+    read -r sid                                                                                                                   
+                                                                                                                                  
+    case $sid in                                                                                                                  
+        [eE]*) echo "electrical engineering" ;;                                                                                   
+        [cC]*) echo "computer science" ;;                                                                                         
+        [mM]*) echo "mechanical engineering" ;;                                                                                   
+        *)     echo "invalid student id" ;;                                                                                       
+    esac                                                                                                                          
+}                                                                                                                                 
+                                                                                                                                  
+# ---------- show grade ----------                                                                                                
+show_grade() {                                                                                                                    
+    local score                                                                                                                   
+    printf "請輸入數學成績 (0-100): "                                                                                                    
+    read -r score                                                                                                                 
+                                                                                                                                  
+    # 必須是非負整數 (負數、小數、文字都視為 invalid score)                                                                                         
+    if [[ ! $score =~ ^[0-9]+$ ]]; then                                                                                           
+        echo "invalid score"                                                                                                      
+        return                                                                                                                    
+    fi                                                                                                                            
+                                                                                                                                  
+    score=$((10#$score))        # 去掉前導 0，避免 "085" 被當成八進位                                                                          
+                                                                                                                                  
+    if [ "$score" -gt 100 ]; then                                                                                                 
+        echo "invalid score"                                                                                                      
+        return                                                                                                                    
+    fi                                                                                                                            
+                                                                                                                                  
+    case $score in                                                                                                                
+        100|9[0-9]) echo "a+" ;;                                                                                                  
+        8[0-9])     echo "a"  ;;                                                                                                  
+        7[0-9])     echo "b"  ;;                                                                                                  
+        6[0-9])     echo "c"  ;;                                                                                                  
+        *)          echo "f"  ;;                                                                                                  
+    esac                                                                                                                          
+}                                                                                                                                 
+                                                                                                                                  
+# ---------- save result ----------                                                                                               
+save_result() {                                                                                                                   
+    local sid score fname                                                                                                         
+    printf "請輸入學生學號: "                                                                                                            
+    read -r sid                                                                                                                   
+    printf "請輸入數學成績: "                                                                                                            
+    read -r score                                                                                                                 
+    printf "請輸入程式檔名: "                                                                                                            
+    read -r fname                                                                                                                 
+                                                                                                                                  
+    # >> 為附加寫入：result 不存在會自動建立，已存在則接在最後面                                                                                          
+    echo "$sid $score $fname" >> result                                                                                           
+    echo "result saved"                                                                                                           
+}                                                                                                                                 
+                                                                                                                                  
+# ---------- 主選單 ----------                                                                                                       
+# bash 的 select 在選完後不會自動重印選單，                                                                                                     
+# 所以外面包一層 while，每次處理完就 break 讓 select 重新開始。                                                                                       
+while true; do                                                                                                                    
+    picked=0                                                                                                                      
+                                                                                                                                  
+    select choice in "${options[@]}"; do                                                                                          
+        picked=1                                                                                                                  
+                                                                                                                                  
+        case $choice in                                                                                                           
+            "check file")        check_file ;;                                                                                    
+            "check department")  check_department ;;                                                                              
+            "show grade")        show_grade ;;                                                                                    
+            "save result")       save_result ;;                                                                                   
+            "exit")                                                                                                               
+                echo "goodbye"                                                                                                    
+                break 2          # 同時跳出 select 與 while                                                                            
+                ;;                                                                                                                
+            *)                                                                                                                    
+                echo "invalid selection"                                                                                          
+                ;;                                                                                                                
+        esac                                                                                                                      
+                                                                                                                                  
+        break                    # 回到 while，重新顯示選單                                                                                
+    done                                                                                                                          
+                                                                                                                                  
+    # select 沒進入過迴圈本體 = 輸入結束 (Ctrl+D)，避免無窮迴圈                                                                                      
+    if [ "$picked" -eq 0 ]; then                                                                                                  
+        echo                                                                                                                      
+        echo "goodbye"                                                                                                            
+        break                                                                                                                     
+    fi                                                                                                                            
+done                                                                                                                              
+[yyyou@webminal ~]$ bash 1123.sh                                                                                                  
+1123.sh: line 1: 3=請選擇功能 (輸入編號): : command not found                                                                              
+1) check file                                                                                                                     
+2) check department                                                                                                               
+3) show grade                                                                                                                     
+4) save result                                                                                                                    
+5) exit                                                                                                                           
+#? 1                                                                                                                              
+請輸入程式檔案名稱:                                                                                                                        
+file not found                                                                                                                    
+1) check file                                                                                                                     
+2) check department                                                                                                               
+3) show grade                                                                                                                     
+4) save result                                                                                                                    
+5) exit                                                                                                                           
+#? 5                                                                                                                              
+goodbye                                                                                                                           
+[yyyou@webminal ~]$ touch 44444.sh                                                                                                
+[yyyou@webminal ~]$ bash 1123.sh                                                                                                  
+1123.sh: line 1: 3=請選擇功能 (輸入編號): : command not found                                                                              
+1) check file                                                                                                                     
+2) check department                                                                                                               
+3) show grade                                                                                                                     
+4) save result                                                                                                                    
+5) exit                                                                                                                           
+#? 1                                                                                                                              
+請輸入程式檔案名稱: 44444.sh                                                                                                               
+file ok                                                                                                                           
+1) check file                                                                                                                     
+2) check department                                                                                                               
+3) show grade                                                                                                                     
+4) save result                                                                                                                    
+5) exit                                                                                                                           
+#? 1                                                                                                                              
+請輸入程式檔案名稱: 44444444444.sh                                                                                                         
+file not found                                                                                                                    
+1) check file                                                                                                                     
+2) check department                                                                                                               
+3) show grade                                                                                                                     
+4) save result                                                                                                                    
+5) exit                                                                                                                           
+#? 2                                                                                                                              
+請輸入學生學號: e12345                                                                                                                   
+electrical engineering                                                                                                            
+1) check file                                                                                                                     
+2) check department                                                                                                               
+3) show grade                                                                                                                     
+4) save result                                                                                                                    
+5) exit                                                                                                                           
+#? 2                                                                                                                              
+請輸入學生學號: h123                                                                                                                     
+invalid student id                                                                                                                
+1) check file                                                                                                                     
+2) check department                                                                                                               
+3) show grade                                                                                                                     
+4) save result                                                                                                                    
+5) exit                                                                                                                           
+#? 3                                                                                                                              
+請輸入數學成績 (0-100): 78                                                                                                               
+b                                                                                                                                 
+1) check file                                                                                                                     
+2) check department                                                                                                               
+3) show grade                                                                                                                     
+4) save result                                                                                                                    
+5) exit                                                                                                                           
+#? 3                                                                                                                              
+請輸入數學成績 (0-100): 101                                                                                                              
+invalid score                                                                                                                     
+1) check file                                                                                                                     
+2) check department                                                                                                               
+3) show grade                                                                                                                     
+4) save result                                                                                                                    
+5) exit                                                                                                                           
+#? 4                                                                                                                              
+請輸入學生學號: e12345                                                                                                                   
+請輸入數學成績: 98                                                                                                                       
+請輸入程式檔名: mm.sh                                                                                                                    
+result saved                                                                                                                      
+1) check file                                                                                                                     
+2) check department                                                                                                               
+3) show grade                                                                                                                     
+4) save result                                                                                                                    
+5) exit                                                                                                                           
+#? 5                                                                                                                              
+goodbye                                                                                                                           
+[yyyou@webminal ~]$ cat mm.sh                                                                                                     
+cat: mm.sh: No such file or directory                                                                                             
+[yyyou@webminal ~]$ cat result                                                                                                    
+e1222 67 main.sh                                                                                                                  
+c12345 56 cc.sh                                                                                                                   
+e12345 98 mm.sh       
